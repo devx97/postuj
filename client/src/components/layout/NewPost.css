@@ -1,0 +1,37 @@
+.container {
+  margin: 20px auto;
+  width: 70%;
+  overflow: auto;
+}
+
+.textarea {
+  background: #333;
+  margin: 0 auto;
+  width: 100%;
+  border: 2px solid #aaa;
+  padding: 5px;
+  resize: vertical;
+  font-size: 16px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  color: #ccc;
+}
+
+.textarea:focus {
+  border: 3px solid #ccc;
+  outline: 0;
+}
+
+.submit {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background: royalblue;
+  border: 1px solid royalblue;
+  font-size: 16px;
+  color: #ccc;
+  float: right;
+  width: 80px;
+  height: 25px;
+}

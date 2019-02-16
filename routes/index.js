@@ -3,12 +3,13 @@ const {body} = require('express-validator/check')
 const router = express.Router()
 
 const mainController = require('../controllers/index')
+const isAuth = require('../middleware/is-auth')
 
 router.post('/post/new',
     [
         body('content')
-        .trim()
         .isLength({min: 10})
+        .trim()
     ],
     mainController.postNewPost)
 

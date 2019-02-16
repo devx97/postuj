@@ -15,7 +15,8 @@ const postSchema = new Schema({
     type: String,
   },
   comments: {
-    type: [Schema.Types.ObjectId]
+    type: [Schema.Types.ObjectId],
+    ref: 'Post'
   }
 }, {_id: false, timestamps: true})
 

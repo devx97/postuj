@@ -17,7 +17,11 @@ class Blog extends Component {
   }
 
   async componentDidMount() {
-    const result = await axios.get('http://localhost:5000/api/posts')
+    const result = await axios.get('http://localhost:5000/api/posts', {
+      headers: {
+        Authorization: localStorage.getItem('token')
+      }
+    })
     this.props.addPosts(result.data)
   }
 

@@ -15,6 +15,6 @@ router.post('/post/new',
 
 router.get('/post/:id', mainController.getPost)
 
-router.get('/posts', mainController.getPosts)
+router.get('/posts', isAuth, mainController.getPosts)
 
 module.exports = router

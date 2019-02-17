@@ -8,11 +8,16 @@ export const addPosts = posts => ({
   posts
 })
 
-export const logIn = token => ({
+export const logIn = (token, user) => ({
   type: 'LOGIN',
-  token
+  token,
+  user,
 })
 
 export const logOut = () => ({
   type: 'LOGOUT',
+})
+
+export const initUser = user => ({
+  type: 'INIT_USER',
 })

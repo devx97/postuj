@@ -26,7 +26,7 @@ class Login extends Component {
         email: this.state.email,
         password: this.state.password,
       })
-      this.props.logIn(result.data.token)
+      this.props.logIn(result.data.token, result.data.user)
       this.props.history.push('/')
     } catch (err) {
       this.setState(prev => {
@@ -70,7 +70,7 @@ class Login extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  logIn: token => dispatch(logIn(token))
+  logIn: (token, user) => dispatch(logIn(token, user))
 })
 
 export default connect(

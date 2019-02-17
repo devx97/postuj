@@ -14,9 +14,8 @@ const NewPost = props => {
       const result = await axios.post(
           'http://localhost:5000/api/post/new', {
             content,
-            author: 'RayColl'
+            author: props.user.name
           })
-      console.log(result.data);
       props.addPost(result.data)
       setPostContent('')
     } catch (err) {
@@ -39,11 +38,15 @@ const NewPost = props => {
   );
 }
 
+const mapStateToProps = state => ({
+  user: state.auth.user
+})
+
 const mapDispatchToProps = dispatch => ({
   addPost: post => dispatch(addPost(post))
 })
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps,
 )(NewPost)

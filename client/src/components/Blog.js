@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios'
 import NewPost from "./layout/NewPost";
 import {connect} from 'react-redux'
-import {addPosts} from "../actions";
+import {addPosts, logIn} from "../actions";
 import './Blog.css'
 import TimeAgo from "react-timeago/lib/index";
 import polishStrings from 'react-timeago/lib/language-strings/pl'
@@ -12,16 +12,14 @@ const formatter = buildFormatter(polishStrings)
 
 
 class Blog extends Component {
-  state = {
-    posts: []
-  }
-
   async componentDidMount() {
     const result = await axios.get('http://localhost:5000/api/posts', {
       headers: {
         Authorization: localStorage.getItem('token')
       }
     })
+    if (result.headers.jwt)
+      this.props.logIn(result.headers.jwt)
     this.props.addPosts(result.data)
   }
 
@@ -56,7 +54,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  addPosts: posts => dispatch(addPosts(posts))
+  addPosts: posts => dispatch(addPosts(posts)),
+  logIn: token => dispatch(logIn(token)),
 })
 
 export default connect(

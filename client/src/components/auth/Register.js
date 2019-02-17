@@ -31,7 +31,7 @@ class Register extends Component {
         password: this.state.password,
         password2: this.state.password2
       })
-      console.log(result);
+      this.props.history.push('/login')
     } catch (err) {
       this.setState(prev => {
         prev.errors = {

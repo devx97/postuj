@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import './header.css'
-import {Link, Redirect} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import {logIn, logOut} from "../../actions";
 import axios from 'axios'
@@ -8,20 +8,37 @@ import axios from 'axios'
 class Header extends Component {
   async componentDidMount() {
     try {
-      const result = await axios.get('http://localhost:5000/api/auth/refresh', {
+      const result = await axios.get('http://localhost:5000/api/auth/token', {
         headers: {
           Authorization: localStorage.getItem('token')
         }
       })
-      this.props.logIn(result.data.token)
+      console.log(result);
+      if (result.headers.jwt) {
+        this.props.logIn(result.headers.jwt, result.data.user)
+      } else if (result.data.success) {
+        this.props.logIn(localStorage.getItem('token'), result.data.user)
+      }
     } catch (err) {
       console.log(err)
     }
   }
 
-  // handleLogOut = event => {
-  //
-  // }
+  handleLogOut = async event => {
+    event.preventDefault()
+    try {
+      const result = await axios.get('http://localhost:5000/api/auth/logout', {
+        headers: {
+          Authorization: localStorage.getItem('token')
+        }
+      })
+      console.log(result)
+      this.props.logOut()
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   render() {
     return (
         <div className="header-content">
@@ -29,8 +46,8 @@ class Header extends Component {
           <Link to={'/hot'} className="link">Gorące</Link>
           {this.props.isLogged ?
               <div className="link-right">
-                <button className="logout"
-                        onClick={event => this.props.logOut()}>Logout
+                <button className="logout" onClick={this.handleLogOut}>
+                  Logout
                 </button>
                 <Link to={'/profile'} className="link ">Profile</Link>
               </div>
@@ -50,7 +67,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   logOut: () => dispatch(logOut()),
-  logIn: token => dispatch(logIn(token))
+  logIn: (token, user) => dispatch(logIn(token, user))
 })
 
 export default connect(

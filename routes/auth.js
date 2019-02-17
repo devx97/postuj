@@ -36,12 +36,16 @@ router.put('/register',
     authController.register
 )
 
-router.post('/login',
+router.post(
+    '/login',
     [
       body('email').normalizeEmail()
-    ]
-    , authController.login)
+    ],
+    authController.login
+)
 
-router.get('/refresh', isAuth, authController.refreshToken)
+router.get('/logout', isAuth, authController.logOut)
+
+router.get('/token', isAuth, authController.token)
 
 module.exports = router

@@ -54,7 +54,7 @@ exports.login = (req, res, next) => {
             name: user.name
           },
           'supersecretkeyxd',
-          {expiresIn: '10s'} // beware of isAuth too
+          {expiresIn: '30m'} // beware of isAuth too
       )
       const tokenM = new Token({
         userId: user._id.toString(),

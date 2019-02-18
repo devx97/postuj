@@ -1,0 +1,5 @@
+{
+  "env": {
+    "DB": "mongodb://localhost/postuj"
+  }
+}

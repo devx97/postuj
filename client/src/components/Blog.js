@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import axios from 'axios'
 import NewPost from "./layout/NewPost";
 import {connect} from 'react-redux'
 import {addPosts, logIn} from "../actions";
@@ -7,26 +6,25 @@ import './Blog.css'
 import TimeAgo from "react-timeago/lib/index";
 import polishStrings from 'react-timeago/lib/language-strings/pl'
 import buildFormatter from 'react-timeago/lib/formatters/buildFormatter'
+import backend from '../apis/backend'
 
 const formatter = buildFormatter(polishStrings)
 
 
 class Blog extends Component {
   async componentDidMount() {
-    const result = await axios.get('http://localhost:5000/api/posts', {
-      headers: {
-        Authorization: localStorage.getItem('token')
-      }
-    })
-    if (result.headers.jwt)
-      this.props.logIn(result.headers.jwt)
-    this.props.addPosts(result.data)
+    try {
+      const result = await backend.get('/posts')
+      this.props.addPosts(result.data)
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   render() {
     return (
         <div className="blog">
-          <NewPost/>
+          {this.props.isLogged ? <NewPost/> : ''}
           {this.props.posts.map(
               post =>
                   <div key={post._id} className="postContainer">
@@ -50,7 +48,8 @@ class Blog extends Component {
 }
 
 const mapStateToProps = state => ({
-  posts: state.posts
+  posts: state.posts,
+  isLogged: state.auth.isLogged
 })
 
 const mapDispatchToProps = dispatch => ({

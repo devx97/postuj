@@ -44,7 +44,7 @@ router.post(
     authController.login
 )
 
-router.get('/logout', isAuth, authController.logOut)
+router.get('/logout', authController.logOut)
 
 router.get('/token', isAuth, authController.token)
 

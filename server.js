@@ -23,7 +23,7 @@ app.use((err, req, res, next) => {
 })
 
 const PORT = process.env.PORT || 5000
-mongoose.connect('mongodb://localhost/postuj')
+mongoose.connect(process.env.DB)
 .then(res => {
   app.listen(PORT)
 })

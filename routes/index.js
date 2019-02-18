@@ -6,6 +6,7 @@ const mainController = require('../controllers/index')
 const isAuth = require('../middleware/is-auth')
 
 router.post('/post/new',
+    isAuth,
     [
         body('content')
         .isLength({min: 10})
@@ -15,6 +16,6 @@ router.post('/post/new',
 
 router.get('/post/:id', mainController.getPost)
 
-router.get('/posts', isAuth, mainController.getPosts)
+router.get('/posts', mainController.getPosts)
 
 module.exports = router

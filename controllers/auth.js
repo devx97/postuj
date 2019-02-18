@@ -54,7 +54,7 @@ exports.login = (req, res, next) => {
             name: user.name
           },
           'supersecretkeyxd',
-          {expiresIn: '30m'}
+          {expiresIn: '10s'} // beware of isAuth too
       )
       const tokenM = new Token({
         userId: user._id.toString(),
@@ -89,16 +89,3 @@ exports.token = (req, res, next) => {
     throw err
   })
 }
-
-// exports.refreshToken = (req, res, next) => {
-//   const token = req.get('Authorization').split(' ')[1]
-//   const decodedToken = jwt.verify(token, 'supersecretkeyxd')
-//   const newToken = jwt.sign({
-//         userId: decodedToken.userId,
-//         name: decodedToken.name
-//       },
-//       'supersecretkeyxd',
-//       {expiresIn: '1h'}
-//   )
-//   return res.status(200).json({token: newToken, userId: decodedToken.userId})
-// }

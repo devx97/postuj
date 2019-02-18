@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import axios from 'axios'
 import './Auth.css'
+import backend from '../../apis/backend'
 
 class Register extends Component {
 
@@ -25,7 +25,7 @@ class Register extends Component {
     event.preventDefault()
     console.log(this.state)
     try {
-      const result = await axios.put('http://localhost:5000/api/auth/register', {
+      await backend.put('/auth/register', {
         name: this.state.name,
         email: this.state.email,
         password: this.state.password,

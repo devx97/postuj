@@ -17,7 +17,3 @@ export const logIn = (token, user) => ({
 export const logOut = () => ({
   type: 'LOGOUT',
 })
-
-export const initUser = user => ({
-  type: 'INIT_USER',
-})

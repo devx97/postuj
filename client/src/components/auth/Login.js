@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import axios from 'axios'
 import './Auth.css'
 import {logIn} from "../../actions";
 import {connect} from "react-redux";
+import backend from '../../apis/backend'
 
 class Login extends Component {
 
@@ -22,7 +22,7 @@ class Login extends Component {
   handleLogin = async event => {
     event.preventDefault()
     try {
-      const result = await axios.post('http://localhost:5000/api/auth/login', {
+      const result = await backend.post('/auth/login', {
         email: this.state.email,
         password: this.state.password,
       })

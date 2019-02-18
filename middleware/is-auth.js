@@ -3,15 +3,14 @@ const sha256 = require('sha256')
 const Token = require('../models/Token')
 
 module.exports = (req, res, next) => {
-  if (!req.get('Authorization')) {
+  if (!req.get('Authorization').split(' ')[1]) {
     const err = new Error('Not authenticated.')
     err.statusCode = 401
     throw err
   }
   const token = req.get('Authorization').split(' ')[1]
-  let decodedToken
   try {
-    decodedToken = jwt.verify(token, 'supersecretkeyxd',
+    let decodedToken = jwt.verify(token, 'supersecretkeyxd',
         {clockTimestamp: jwt.decode(token).iat})
     if (decodedToken.exp >= Date.now() / 1000) { // if token exp time is valid
       req.userId = decodedToken.userId
@@ -21,7 +20,6 @@ module.exports = (req, res, next) => {
       .catch(console.log)
       .finally(() => {
         const err = new Error('Token expired. Log in to continue.')
-        err.data = [{msg: 'Token expired. Log in to continue.'}]
         err.statusCode = 401
         next(err)
       })
@@ -29,17 +27,23 @@ module.exports = (req, res, next) => {
       Token.findOne({jwt_hash: sha256(token)})
       .then(DBtoken => {
         if (!DBtoken) {
-          const err = new Error(
-              'Someone may be using your account. Change password.')
-          err.statusCode = 199
-          throw err
+          return Token.deleteMany({userId: decodedToken.userId})
+          .catch(err => {
+            next(err)
+          })
+          .finally(() => {
+            const err = new Error(
+                'Someone may be using your account. Change password.')
+            err.statusCode = 401
+            return next(err)
+          })
         }
         const token = jwt.sign({
               userId: decodedToken.userId,
               name: decodedToken.name
             },
             'supersecretkeyxd',
-            {expiresIn: '30m'}
+            {expiresIn: '30m'} // beware of auth controller too
         )
         const newToken = new Token({
           userId: decodedToken.userId,
@@ -56,21 +60,14 @@ module.exports = (req, res, next) => {
           next()
         })
         .catch(err => {
-          throw err})
-      })
-      .catch(err => {
-        Token.deleteMany({userId: decodedToken.userId})
-        .catch(err => {
           throw err
         })
       })
+      .catch(err => {
+        throw err
+      })
     }
   } catch (err) {
-    throw err
-  }
-  if (!decodedToken) {
-    const err = new Error('Not authenticated.')
-    err.statusCode = 401
     throw err
   }
 }

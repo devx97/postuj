@@ -3,22 +3,13 @@ import './header.css'
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import {logIn, logOut} from "../../actions";
-import axios from 'axios'
+import backend from '../../apis/backend'
 
 class Header extends Component {
   async componentDidMount() {
     try {
-      const result = await axios.get('http://localhost:5000/api/auth/token', {
-        headers: {
-          Authorization: localStorage.getItem('token')
-        }
-      })
-      console.log(result);
-      if (result.headers.jwt) {
-        this.props.logIn(result.headers.jwt, result.data.user)
-      } else if (result.data.success) {
-        this.props.logIn(localStorage.getItem('token'), result.data.user)
-      }
+      const result = await backend.get('/auth/token')
+      this.props.logIn(localStorage.getItem('token'), result.data.user)
     } catch (err) {
       console.log(err)
     }
@@ -27,7 +18,7 @@ class Header extends Component {
   handleLogOut = async event => {
     event.preventDefault()
     try {
-      const result = await axios.get('http://localhost:5000/api/auth/logout', {
+      const result = await backend.get('/auth/logout', {
         headers: {
           Authorization: localStorage.getItem('token')
         }

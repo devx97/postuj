@@ -14,9 +14,12 @@ export const addPost = content => dispatch => {
 
 export const checkToken = () => dispatch => {
   backend.get('/auth/token')
-  .then(result => dispatch(logIn(result.data.token)))
+  .then(result => {
+    console.log('No need to dispatch login action because token is already in headers')
+  })
   .catch(error => {
-    console.log(error)
+    console.log('Provided token is probably invalid or 2 weeks old')
+    console.log(error.message)
   })
 }
 

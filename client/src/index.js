@@ -12,8 +12,10 @@ const token = localStorage.getItem('token');
 if (token) {
   const decodedToken = jwtdecode(token)
   if (Date.now() / 1000 < decodedToken.exp - 1) {
+    console.log('Logging in with good token.')
     store.dispatch(logIn(token))
   } else {
+    console.log('Checking if token is valid and refreshing if possible')
     store.dispatch(checkToken())
   }
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 import store from '../store'
-import {logIn} from "../actions";
+import {logIn, logOut} from "../actions";
 import {history} from '../ExtendedBrowserRouter'
 
 const backend = axios.create({
@@ -13,13 +13,18 @@ const backend = axios.create({
 
 backend.interceptors.response.use(result => {
   if (result.headers.jwt) {
+    console.log('Got refreshed token!')
     store.dispatch(logIn(result.headers.jwt))
     return result
   }
   return result
 }, err => {
-  if (err.response.status === 401)
+  console.log('Probably invalid token or some error')
+  console.log(err.response.message)
+  if (err.response.status === 401) {
     history.push('/login')
+    store.dispatch(logOut())
+  }
   return Promise.reject(err);
 });
 

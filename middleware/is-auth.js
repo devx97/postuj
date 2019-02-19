@@ -46,7 +46,7 @@ module.exports = (req, res, next) => {
               name: decodedToken.name
             },
             process.env.JWT_SECRET,
-            {expiresIn: '10s'} // beware of auth controller too
+            {expiresIn: process.env.JWT_TTL}
         )
         const newToken = new Token({
           userId: decodedToken.userId,

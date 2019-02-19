@@ -21,9 +21,8 @@ app.use((err, req, res, next) => {
   const data = err.data;
   res.status(err.statusCode || 500).json({message, data});
 })
-
 const PORT = process.env.PORT || 5000
-mongoose.connect(process.env.DB)
+mongoose.connect(process.env.DB_URI)
 .then(res => {
   app.listen(PORT)
 })

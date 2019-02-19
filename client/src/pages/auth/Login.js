@@ -27,7 +27,12 @@ class Login extends Component {
         password: this.state.password,
       })
       this.props.logIn(result.data.token, result.data.user)
-      this.props.history.push('/')
+      const {history} = this.props
+      if (history.length === 1) {
+        history.push('/')
+      } else {
+        this.props.history.goBack()
+      }
     } catch (err) {
       console.log(err);
     }
@@ -40,7 +45,7 @@ class Login extends Component {
             <div className="auth-item">
               <label>Email</label>
               <input type="email" name="email" placeholder="Enter email"
-                     className={this.state.errors.email.length ? 'error': ''}
+                     className={this.state.errors.email.length ? 'error' : ''}
                      onChange={this.handleChange}
                      value={this.state.email}
                      required/>
@@ -49,7 +54,8 @@ class Login extends Component {
             <div className="auth-item">
               <label>Password</label>
               <input type="password" name="password"
-                     className={this.state.errors.password.length ? 'error': ''}
+                     className={this.state.errors.password.length ? 'error'
+                         : ''}
                      onChange={this.handleChange}
                      value={this.state.password}
                      placeholder="Enter password" required/>

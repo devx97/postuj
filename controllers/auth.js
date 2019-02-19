@@ -33,6 +33,7 @@ exports.register = (req, res, next) => {
 
 exports.login = (req, res, next) => {
   const {email, password} = req.body
+
   User.findOne({email})
   .then(user => {
     if (!user) {
@@ -54,7 +55,7 @@ exports.login = (req, res, next) => {
             name: user.name
           },
           process.env.JWT_SECRET,
-          {expiresIn: '10s'} // beware of isAuth too
+          {expiresIn: process.env.JWT_TTL}
       )
       const tokenM = new Token({
         userId: user._id.toString(),

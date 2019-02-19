@@ -61,7 +61,7 @@ exports.login = (req, res, next) => {
         jwt_hash: sha256(token),
       })
       return tokenM.save()
-      .then(result => res.status(200).json({token, user: {name: user.name, email: user.email}}))
+      .then(result => res.status(200).json({token, user: {_id: user._id, name: user.name}}))
       .catch(next)
     })
     .catch(next)
@@ -70,18 +70,18 @@ exports.login = (req, res, next) => {
 }
 
 exports.logOut = (req, res, next) => {
-  res.setHeader('jwt', null)
+  res.setHeader('jwt', undefined)
   const token = req.get('Authorization').split(' ')[1]
   Token.findOneAndRemove({jwt_hash: sha256(token)})
   .catch(err => {
-    throw err
+    console.log(err)
   })
   .finally(() => res.json({message: 'Logged out', success: true}))
 }
 
 exports.token = (req, res, next) => {
   User.findById(req.userId)
-  .select('name email -_id')
+  .select('_id name')
   .then(user => {
     return res.status(200).json({user, message: 'Authorized!', success: true})
   })

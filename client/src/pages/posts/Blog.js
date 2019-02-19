@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import NewPost from "../../components/posts/NewPost";
 import {connect} from 'react-redux'
-import {addPosts, logIn} from "../../actions";
+import {addPosts} from "../../actions";
 import './Blog.css'
 import TimeAgo from "react-timeago/lib/index";
 import polishStrings from 'react-timeago/lib/language-strings/pl'

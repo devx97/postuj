@@ -1,29 +1,29 @@
 import backend from '../apis/backend'
 
-export const addPost = content => {
-  return dispatch => {
-    backend.post('/post/new', {
-      content
-    })
-    .then(result => {
-      console.log(result);
-    })
-    .catch(error => {
-      console.log(error);
-    })
-  }
+export const addPost = content => dispatch => {
+  backend.post('/post/new', {
+    content
+  })
+  .then(result => {
+    dispatch(addPostSuccess(result.data))
+  })
+  .catch(error => {
+    console.log(error);
+  })
 }
 
-const addPostSuccess = todo => ({
-  type: 'ADD_POST_SUCCESS',
-  todo
-})
+export const checkToken = () => dispatch => {
+  backend.get('/auth/token')
+  .then(result => dispatch(logIn(result.data.token)))
+  .catch(error => {
+    console.log(error)
+  })
+}
 
-const addTodoFailure = error => ({
-  type: 'ADD_TODO_FAILURE',
-  payload: {
-    error
-  }
+
+const addPostSuccess = post => ({
+  type: 'ADD_POST_SUCCESS',
+  post
 })
 
 export const addPosts = posts => ({
@@ -31,10 +31,9 @@ export const addPosts = posts => ({
   posts
 })
 
-export const logIn = (token, user) => ({
+export const logIn = token => ({
   type: 'LOGIN',
-  token,
-  user,
+  token
 })
 
 export const logOut = () => ({

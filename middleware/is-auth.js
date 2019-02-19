@@ -4,7 +4,6 @@ const Token = require('../models/Token')
 
 module.exports = (req, res, next) => {
   if (!req.get('Authorization') || req.get('Authorization') === 'null') {
-    console.log(req.get('nullsd'))
     const err = new Error('Not authenticated.')
     err.statusCode = 401
     throw err
@@ -14,8 +13,6 @@ module.exports = (req, res, next) => {
     let decodedToken = jwt.verify(token, process.env.JWT_SECRET,
         {clockTimestamp: jwt.decode(token).iat})
     if (decodedToken.exp >= Date.now() / 1000) { // if token exp time is valid
-      console.log(decodedToken);
-      console.log('valid');
       req.userId = decodedToken.userId
       req.userName = decodedToken.name
       next()
@@ -24,6 +21,7 @@ module.exports = (req, res, next) => {
       .catch(console.log)
       .finally(() => {
         const err = new Error('Token expired. Log in to continue.')
+        err.logout = true
         err.statusCode = 401
         next(err)
       })
@@ -31,11 +29,11 @@ module.exports = (req, res, next) => {
       Token.findOne({jwt_hash: sha256(token)})
       .then(DBtoken => {
         if (!DBtoken) {
-          console.log('hacker!');
           return Token.deleteMany({userId: decodedToken.userId})
           .then(result => {
             const err = new Error(
                 'Someone may be using your account. Change password.')
+            err.logout = true
             err.statusCode = 401
             return next(err)
           })
@@ -50,26 +48,17 @@ module.exports = (req, res, next) => {
             process.env.JWT_SECRET,
             {expiresIn: '10s'} // beware of auth controller too
         )
-        console.log('co');
-        console.log(token);
-        console.log('co');
         const newToken = new Token({
           userId: decodedToken.userId,
           jwt_hash: sha256(token)
         })
-        console.log('co');
-        console.log(token);
-        console.log('co');
-        console.log(DBtoken);
         setTimeout(() => {
-          console.log('removing');
           DBtoken.remove()
           .catch(err => {
             throw err
           })
           .finally(() => newToken.save())
-        }, 3000)
-        console.log('SENDING NEW TOKEN');
+        }, 1000)
         res.setHeader('jwt', token)
         req.userId = decodedToken.userId
         req.userName = decodedToken.name

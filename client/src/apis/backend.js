@@ -1,6 +1,7 @@
 import axios from "axios";
+import store from '../store'
 import {logIn} from "../actions";
-import {applyMiddleware as dispatch} from "redux";
+import {history} from '../ExtendedBrowserRouter'
 
 const backend = axios.create({
   baseURL: 'http://localhost:5000/api',
@@ -11,20 +12,14 @@ const backend = axios.create({
 })
 
 backend.interceptors.response.use(result => {
-  console.log(result);
-  console.log('NEW TOKEN >>>');
-  console.log(result.headers.jwt);
-  console.log('NEW TOKEN <<<');
-  console.log(typeof result.headers.jwt === 'string')
-  console.log(result.headers.jwt instanceof String)
   if (result.headers.jwt) {
-    console.log('new token!')
-    console.log(result.headers.jwt)
-    dispatch(logIn(result.headers.jwt, result.data.user))
+    store.dispatch(logIn(result.headers.jwt))
     return result
   }
   return result
 }, err => {
+  if (err.response.status === 401)
+    history.push('/login')
   return Promise.reject(err);
 });
 

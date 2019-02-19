@@ -2,24 +2,25 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import {BrowserRouter} from "react-router-dom";
 import {Provider} from 'react-redux'
-import {applyMiddleware, createStore, compose} from 'redux'
-import rootReducer from './reducers'
-import thunk from 'redux-thunk'
+import {checkToken, logIn} from "./actions";
+import jwtdecode from 'jwt-decode'
+import store from './store'
+import ExtendedBrowserRouter, {history} from "./ExtendedBrowserRouter";
 
-const store = createStore(
-    rootReducer,
-    compose(
-        applyMiddleware(thunk),
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-    )
-)
-
+const token = localStorage.getItem('token');
+if (token) {
+  const decodedToken = jwtdecode(token)
+  if (Date.now() / 1000 < decodedToken.exp - 1) {
+    store.dispatch(logIn(token))
+  } else {
+    store.dispatch(checkToken())
+  }
+}
 ReactDOM.render(
     <Provider store={store}>
-      <BrowserRouter>
+      <ExtendedBrowserRouter history={history}>
         <App/>
-      </BrowserRouter>
+      </ExtendedBrowserRouter>
     </Provider>,
     document.getElementById('root'))

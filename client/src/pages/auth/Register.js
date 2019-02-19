@@ -23,7 +23,6 @@ class Register extends Component {
 
   handleRegister = async event => {
     event.preventDefault()
-    console.log(this.state)
     try {
       await backend.put('/auth/register', {
         name: this.state.name,

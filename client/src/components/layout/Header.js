@@ -2,22 +2,10 @@ import React, {Component} from 'react'
 import './Header.css'
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
-import {logIn, logOut} from "../../actions";
+import {logOut} from "../../actions";
 import backend from '../../apis/backend'
 
 class Header extends Component {
-  async componentDidMount() {
-    if (!localStorage.getItem('token')) {
-      return
-    }
-    try {
-      const result = await backend.get('/auth/token')
-      this.props.logIn(localStorage.getItem('token'), result.data.user)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
   handleLogOut = async event => {
     event.preventDefault()
     try {
@@ -60,8 +48,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  logOut: () => dispatch(logOut()),
-  logIn: (token, user) => dispatch(logIn(token, user))
+  logOut: () => dispatch(logOut())
 })
 
 export default connect(

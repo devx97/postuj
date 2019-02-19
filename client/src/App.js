@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import './App.css';
-import Header from "./layout/Header";
-import Blog from "./Blog";
-import Login from "./auth/Login";
-import Register from "./auth/Register";
+import Header from "./components/layout/Header";
+import Blog from "./pages/posts/Blog";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
 import {Route} from "react-router-dom";
 
 class App extends Component {

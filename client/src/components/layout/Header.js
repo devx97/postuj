@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import './header.css'
+import './Header.css'
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import {logIn, logOut} from "../../actions";
@@ -7,6 +7,9 @@ import backend from '../../apis/backend'
 
 class Header extends Component {
   async componentDidMount() {
+    if (!localStorage.getItem('token')) {
+      return
+    }
     try {
       const result = await backend.get('/auth/token')
       this.props.logIn(localStorage.getItem('token'), result.data.user)

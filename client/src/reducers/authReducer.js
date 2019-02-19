@@ -1,7 +1,6 @@
 const auth = (state = {isLogged: false, token: null, user: {}}, action) => {
   switch (action.type) {
     case 'LOGIN':
-      console.log(action);
       let token = action.token
       if (token.split(' ')[0].toString() !== 'Bearer') {
         token = `Bearer ${token}`

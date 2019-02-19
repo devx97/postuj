@@ -13,10 +13,10 @@ exports.postNewPost = async (req, res, next) => {
       errors: errors.array()
     })
   }
-  const {content, author, imageURL, comments} = req.body
+  const {content, imageURL, comments} = req.body
   const post = new Post({
     content,
-    author,
+    author: req.userName,
     imageURL,
     comments,
   })

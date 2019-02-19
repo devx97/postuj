@@ -1,5 +1,6 @@
 {
   "env": {
-    "DB": "mongodb://localhost/postuj"
+    "DB": "mongodb://localhost/postuj",
+    "JWT_SECRET": "supersecretykey"
   }
 }

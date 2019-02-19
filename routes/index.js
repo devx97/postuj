@@ -11,6 +11,7 @@ router.post('/post/new',
         body('content')
         .isLength({min: 10})
         .trim()
+        .withMessage("Post must contain at least 10 characters.")
     ],
     mainController.postNewPost)
 

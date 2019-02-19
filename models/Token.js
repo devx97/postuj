@@ -13,7 +13,8 @@ const tokenSchema = new Schema({
   },
   expire_at: {
     type: Date,
-    default: Date.now, expires: 14 * 24 * 60 * 60 // 14 days
+    default: Date.now,
+    expires: 14 * 24 * 60 * 60, // 14 days
   }
 })
 

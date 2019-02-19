@@ -53,8 +53,8 @@ exports.login = (req, res, next) => {
             userId: user._id.toString(),
             name: user.name
           },
-          'supersecretkeyxd',
-          {expiresIn: '30m'} // beware of isAuth too
+          process.env.JWT_SECRET,
+          {expiresIn: '10s'} // beware of isAuth too
       )
       const tokenM = new Token({
         userId: user._id.toString(),

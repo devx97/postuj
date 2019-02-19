@@ -1,3 +1,5 @@
+const generateToken = require('../helpers/generateToken')
+
 const {validationResult} = require('express-validator/check')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
@@ -31,43 +33,30 @@ exports.register = (req, res, next) => {
   .catch(next)
 }
 
-exports.login = (req, res, next) => {
-  const {email, password} = req.body
-
-  User.findOne({email})
-  .then(user => {
+exports.login = async (req, res, next) => {
+  try {
+    const {email, password} = req.body
+    const user = await User.findOne({email})
     if (!user) {
       const err = new Error()
       err.data = [{param: 'email', msg: 'Email not found.'}]
       err.statusCode = 401
-      throw err
+      return next(err)
     }
-    bcrypt.compare(password, user.password)
-    .then(isEqual => {
-      if (!isEqual) {
-        const err = new Error()
-        err.data = [{param: 'password', msg: 'Wrong password.'}]
-        err.statusCode = 401
-        throw err
-      }
-      const token = jwt.sign({
-            userId: user._id.toString(),
-            name: user.name
-          },
-          process.env.JWT_SECRET,
-          {expiresIn: process.env.JWT_TTL}
-      )
-      const tokenM = new Token({
-        userId: user._id.toString(),
-        jwt_hash: sha256(token),
-      })
-      return tokenM.save()
-      .then(result => res.status(200).json({token, user: {_id: user._id, name: user.name}}))
-      .catch(next)
-    })
-    .catch(next)
-  })
-  .catch(next)
+    const isEqual = await bcrypt.compare(password, user.password)
+    if (!isEqual) {
+      const err = new Error()
+      err.data = [{param: 'password', msg: 'Wrong password.'}]
+      err.statusCode = 401
+      return next(err)
+    }
+    const token = generateToken(user._id, user.name)
+    const tokenSession = new Token({userId: user._id.toString(), jwt_hash: sha256(token)})
+    await tokenSession.save()
+    res.status(200).json({token, user: {_id: user._id, name: user.name}})
+  } catch (err) {
+    next(err)
+  }
 }
 
 exports.logOut = (req, res, next) => {
@@ -80,13 +69,12 @@ exports.logOut = (req, res, next) => {
   .finally(() => res.json({message: 'Logged out', success: true}))
 }
 
-exports.token = (req, res, next) => {
-  User.findById(req.userId)
-  .select('_id name')
-  .then(user => {
+exports.token = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.userId)
+    .select('_id name')
     return res.status(200).json({user, message: 'Authorized!', success: true})
-  })
-  .catch(err => {
-    throw err
-  })
+  } catch (err) {
+    next(err)
+  }
 }

@@ -14,6 +14,7 @@ const backend = axios.create({
 backend.interceptors.response.use(result => {
   if (result.headers.jwt) {
     console.log('Got refreshed token!')
+    console.log(result.headers.jwt);
     store.dispatch(logIn(result.headers.jwt))
     return result
   }
@@ -22,7 +23,6 @@ backend.interceptors.response.use(result => {
   console.log('Probably invalid token or some error')
   console.log(err.response.message)
   if (err.response.status === 401) {
-    history.push('/login')
     store.dispatch(logOut())
   }
   return Promise.reject(err);

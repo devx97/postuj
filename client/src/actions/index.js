@@ -2,17 +2,18 @@ import {reset} from "redux-form";
 import backend from '../apis/backend'
 import {SubmissionError} from 'redux-form';
 
-export const addPost = content => dispatch =>
+export const addPost = ({content}) => dispatch =>
     backend.post('/post/new', {
-      content: content.newPost
+      content
     })
     .then(result => {
       dispatch(addPostSuccess(result.data))
       dispatch(reset('newPost'))
     })
     .catch(error => {
-      console.log(error.response.data.errors)
-      throw new SubmissionError({newPost: 'XD'})
+      if (error.response.data.errors) {
+        throw new SubmissionError(error.response.data.errors)
+      }
     })
 
 const addPostSuccess = post => ({
@@ -42,3 +43,15 @@ export const logOut = () => async dispatch => {
 export const logOutSuccess = () => ({
   type: 'LOGOUT_SUCCESS'
 })
+
+export const register = form => dispatch =>
+    backend.put('/auth/register', form)
+    .then(result => {
+      dispatch(reset('register'))
+    })
+    .catch(error => {
+      console.log(form);
+        if (error.response.data.errors) {
+          throw new SubmissionError(error.response.data.errors)
+        }
+    })

@@ -5,11 +5,6 @@ import {connect} from "react-redux";
 import {logOut} from "../../actions";
 
 class Header extends Component {
-  // handleLogOut = async event => {
-  //   event.preventDefault()
-  //   this.props.logOut()
-  // }
-
   render() {
     return (
         <div className="header-content">

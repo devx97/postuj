@@ -8,10 +8,10 @@ const isAuth = require('../middleware/is-auth')
 router.post('/post/new',
     isAuth,
     [
-        body('content')
-        .isLength({min: 10})
-        .trim()
-        .withMessage("Post must contain at least 10 characters.")
+      body('content')
+      .trim()
+      .isLength({min: 10})
+      .withMessage("Post must contain at least 10 characters.")
     ],
     mainController.postNewPost)
 

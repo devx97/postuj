@@ -45,6 +45,7 @@ class Login extends Component {
             <div className="auth-item">
               <label>Email</label>
               <input type="email" name="email" placeholder="Enter email"
+                     autoComplete="email"
                      className={this.state.errors.email.length ? 'error' : ''}
                      onChange={this.handleChange}
                      value={this.state.email}
@@ -54,6 +55,7 @@ class Login extends Component {
             <div className="auth-item">
               <label>Password</label>
               <input type="password" name="password"
+                     autoComplete="current-password"
                      className={this.state.errors.password.length ? 'error'
                          : ''}
                      onChange={this.handleChange}

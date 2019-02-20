@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './NewPost.css'
+import './NewPostForm.css'
 import Textarea from 'react-textarea-autosize'
 import {Field, reduxForm} from 'redux-form'
 import {required, length} from "redux-form-validators";
@@ -26,8 +26,7 @@ class NewPostForm extends Component {
         <form className="container"
               onSubmit={handleSubmit(addPost)}>
           <Field
-              htmlFor="newPost"
-              name="newPost"
+              name="content"
               validate={[
                 required({msg: 'Required.'}),
                 length({min: 5, msg: 'Minimum 5 characters.'}),

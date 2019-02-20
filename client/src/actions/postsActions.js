@@ -1,6 +1,7 @@
-import backend from "../apis/backend";
-import {reset, SubmissionError} from "redux-form";
-import {ADD_POST_SUCCESS, ADD_POSTS} from "./types";
+import {reset, SubmissionError} from "redux-form"
+
+import backend from "../apis/backend"
+import {ADD_POST_SUCCESS, ADD_POSTS} from "./types"
 
 export const addPost = ({content}) => dispatch =>
     backend.post('/post/new', {

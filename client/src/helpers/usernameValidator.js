@@ -1,4 +1,4 @@
-import {addValidator} from "redux-form-validators";
+import {addValidator} from "redux-form-validators"
 
 export default addValidator({
   defaultMessage: "Invalid username.",

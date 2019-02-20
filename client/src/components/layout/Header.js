@@ -1,8 +1,10 @@
 import React, {Component} from 'react'
+import {Link} from "react-router-dom"
+import {connect} from "react-redux"
+
+import {logOut} from "../../actions"
+
 import './Header.css'
-import {Link} from "react-router-dom";
-import {connect} from "react-redux";
-import {logOut} from "../../actions";
 
 class Header extends Component {
   render() {

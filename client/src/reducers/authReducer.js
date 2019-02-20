@@ -1,5 +1,6 @@
 import jwtdecode from 'jwt-decode'
-import {LOGIN_WITH_TOKEN, LOGOUT_SUCCESS} from "../actions/types";
+
+import {LOGIN_WITH_TOKEN, LOGOUT_SUCCESS} from "../actions/types"
 
 const auth = (state = {isLogged: false, token: null, user: {}}, action) => {
   switch (action.type) {
@@ -9,7 +10,7 @@ const auth = (state = {isLogged: false, token: null, user: {}}, action) => {
       if (token.split(' ')[0].toString() !== 'Bearer') {
         token = `Bearer ${token}`
       }
-      localStorage.setItem('token', token);
+      localStorage.setItem('token', token)
       return {isLogged: true, token, user: {...decodedToken}}
     case LOGOUT_SUCCESS:
       localStorage.removeItem('token')

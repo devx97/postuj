@@ -1,35 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import React from 'react'
+import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
-import {logInWithToken} from "./actions";
-import jwtdecode from 'jwt-decode'
-import store from './store'
-import ExtendedBrowserRouter, {history} from "./ExtendedBrowserRouter";
-import backend from "./apis/backend";
 
-const token = localStorage.getItem('token');
-if (token && token.split(' ')[0] === 'Bearer') {
-  const decodedToken = jwtdecode(token)
-  if (Date.now() / 1000 < decodedToken.exp - 0) {
-    console.log('Logging in with good token.')
-    store.dispatch(logInWithToken(token))
-  } else if ((Date.now() / 1000) - decodedToken.exp > 2 * 60 * 60) {
-    localStorage.removeItem('token')
-  } else {
-    console.log('Checking if token is valid and refreshing if possible')
-    backend.get('/auth/token')
-    .then(res => {
-      console.log('Logged in.')
-    })
-    .catch(err => {
-      if (err.response.status === 401) {
-        console.log('Provided token is probably invalid or 2 weeks old')
-      }
-    })
-  }
-}
+import store from './store'
+import checkAuth from './helpers/checkAuth'
+import ExtendedBrowserRouter, {history} from "./router/ExtendedBrowserRouter"
+import App from './App'
+import './index.css'
+
+checkAuth()
+
 ReactDOM.render(
     <Provider store={store}>
       <ExtendedBrowserRouter history={history}>

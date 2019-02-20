@@ -1,7 +1,8 @@
 import jwtdecode from "jwt-decode";
-import store from "./store";
-import {logInWithToken} from "./actions";
-import backend from "./apis/backend";
+
+import backend from "../apis/backend";
+import store from "../store";
+import {logInWithToken} from "../actions";
 
 export default () =>{
   const token = localStorage.getItem('token');

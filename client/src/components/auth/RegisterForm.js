@@ -2,12 +2,13 @@ import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {Field, reduxForm} from "redux-form"
 import {required, length, email} from "redux-form-validators"
-import {register} from '../../actions'
+
 import usernameValidator from '../../helpers/usernameValidator'
+import {register} from '../../actions'
 
 class RegisterForm extends Component {
   passwordsMatch = (value, allValues) =>
-      value !== allValues.password ? 'Passwords don\'t match' : undefined;
+      value !== allValues.password ? 'Passwords don\'t match' : undefined
 
   renderField = ({input, label, type, meta: {touched, error}}) =>
       <div className="auth-item">
@@ -81,7 +82,7 @@ class RegisterForm extends Component {
             </div>
           </form>
         </div>
-    );
+    )
   }
 }
 

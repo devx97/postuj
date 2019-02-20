@@ -1,10 +1,12 @@
-import React, {Component} from 'react';
-import './NewPostForm.css'
-import Textarea from 'react-textarea-autosize'
+import React, {Component} from 'react'
+import {connect} from "react-redux"
 import {Field, reduxForm} from 'redux-form'
-import {required, length} from "redux-form-validators";
+import {required, length} from "redux-form-validators"
+import Textarea from 'react-textarea-autosize'
+
 import {addPost} from '../../actions'
-import {connect} from "react-redux";
+
+import './NewPostForm.css'
 
 class NewPostForm extends Component {
   generateTextarea = ({input, meta: {touched, error}}) =>
@@ -36,7 +38,7 @@ class NewPostForm extends Component {
           />
           <input className="submit" type="submit" value={'Wyślij'}/>
         </form>
-    );
+    )
   }
 }
 

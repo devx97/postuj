@@ -5,7 +5,6 @@ const generateToken = require('../helpers/generateToken')
 
 module.exports = async (req, res, next) => {
   if (!req.get('Authorization') || req.get('Authorization') === 'null') {
-    console.log('No auth')
     const err = new Error('Not authenticated.')
     err.statusCode = 401
     return next(err)

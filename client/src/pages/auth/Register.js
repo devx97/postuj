@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
-import RegisterForm from "../../components/auth/RegisterForm";
+import React, {Component} from 'react'
+
+import RegisterForm from "../../components/auth/RegisterForm"
 import './Auth.css'
 
 class Register extends Component {
@@ -8,7 +9,7 @@ class Register extends Component {
         <div className="auth-form">
           <RegisterForm/>
         </div>
-    );
+    )
   }
 }
 

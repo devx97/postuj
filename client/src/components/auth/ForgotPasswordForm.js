@@ -2,11 +2,9 @@ import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {Field, reduxForm} from "redux-form"
 import {required, length, email} from "redux-form-validators"
+import {forgotPassword} from "../../actions"
 
-import {logIn} from "../../actions"
-import {Link} from 'react-router-dom'
-
-class LoginForm extends Component {
+class ForgotPasswordForm extends Component {
   renderField = ({input, label, type, meta: {touched, error}}) =>
       <div className="auth-item">
         <label>{label}</label>
@@ -21,7 +19,7 @@ class LoginForm extends Component {
 
   render() {
     return (
-        <form onSubmit={this.props.handleSubmit(this.props.logIn)}>
+        <form onSubmit={this.props.handleSubmit(this.props.forgotPassword)}>
           <Field
               name="email"
               label="Email"
@@ -35,23 +33,8 @@ class LoginForm extends Component {
                 email({msg: 'Email adress is not valid.'}),
               ]}
           />
-          <Field
-              name="password"
-              label="Password"
-              type="password"
-              autoComplete="new-password"
-              component={this.renderField}
-              validate={[
-                required({msg: 'Required.'}),
-                length({min: 6, msg: 'Minimum 6 characters.'}),
-                length({max: 64, msg: 'Maximum 64 characters.'})
-              ]}
-          />
           <div className="auth-item btn">
-            <button type="submit">Login</button>
-          </div>
-          <div className="auth-item btn">
-            <Link to={'/forgot-password'} type="submit">Forgot password?</Link>
+            <button type="submit">Send</button>
           </div>
         </form>
     )
@@ -59,14 +42,14 @@ class LoginForm extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  logIn: form => dispatch(logIn(form))
+  forgotPassword: form => dispatch(forgotPassword(form))
 })
 
-LoginForm = connect(
+ForgotPasswordForm = connect(
     null,
     mapDispatchToProps
-)(LoginForm)
+)(ForgotPasswordForm)
 
 export default reduxForm({
-  form: 'login'
-})(LoginForm)
+  form: 'forgotPassword'
+})(ForgotPasswordForm)

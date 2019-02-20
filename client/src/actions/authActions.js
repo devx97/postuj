@@ -1,6 +1,7 @@
-import backend from "../apis/backend";
-import {history} from "../ExtendedBrowserRouter";
-import {SubmissionError} from "redux-form";
+import {SubmissionError} from "redux-form"
+
+import backend from "../apis/backend"
+import {history} from "../router/ExtendedBrowserRouter"
 import {LOGIN_WITH_TOKEN, LOGOUT_SUCCESS} from './types'
 
 export const register = form => () =>
@@ -43,3 +44,15 @@ export const logOut = () => async dispatch => {
 const logOutSuccess = () => ({
   type: LOGOUT_SUCCESS
 })
+
+export const forgotPassword = form => async dispatch => {
+  try {
+    console.log(form)
+    await backend.post('/auth/forgot-password', form)
+    console.log('success')
+  } catch (error) {
+    if (error.response.status === 422 && error.response.data.errors) {
+      throw new SubmissionError(error.response.data.errors)
+    }
+  }
+}

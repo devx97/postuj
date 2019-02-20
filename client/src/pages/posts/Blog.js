@@ -1,12 +1,13 @@
-import React, {Component} from 'react';
-import NewPostForm from "../../components/posts/NewPostForm";
+import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {addPosts} from "../../actions";
-import './Blog.css'
-import TimeAgo from "react-timeago/lib/index";
+import TimeAgo from "react-timeago/lib/index"
 import polishStrings from 'react-timeago/lib/language-strings/pl'
 import buildFormatter from 'react-timeago/lib/formatters/buildFormatter'
+
 import backend from '../../apis/backend'
+import NewPostForm from "../../components/posts/NewPostForm"
+import {addPosts} from "../../actions"
+import './Blog.css'
 
 const formatter = buildFormatter(polishStrings)
 
@@ -16,7 +17,7 @@ class Blog extends Component {
       const result = await backend.get('/posts')
       this.props.addPosts(result.data)
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
   }
 
@@ -45,7 +46,7 @@ class Blog extends Component {
                   </div>
           )}
         </div>
-    );
+    )
   }
 }
 

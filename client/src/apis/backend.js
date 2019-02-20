@@ -1,7 +1,9 @@
-import axios from "axios";
-import store from '../store'
-import {logInWithToken, logOut} from "../actions";
+import axios from "axios"
 import jwtdecode from 'jwt-decode'
+
+import store from '../store'
+
+import {logInWithToken, logOut} from "../actions"
 
 const backend = axios.create({
   baseURL: 'http://localhost:5000/api',
@@ -45,4 +47,4 @@ backend.interceptors.response.use(
     }
 )
 
-export default backend;
+export default backend

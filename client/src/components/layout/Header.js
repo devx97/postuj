@@ -3,23 +3,12 @@ import './Header.css'
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import {logOut} from "../../actions";
-import backend from '../../apis/backend'
 
 class Header extends Component {
-  handleLogOut = async event => {
-    event.preventDefault()
-    try {
-      const result = await backend.get('/auth/logout', {
-        headers: {
-          Authorization: localStorage.getItem('token')
-        }
-      })
-      console.log(result)
-      this.props.logOut()
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  // handleLogOut = async event => {
+  //   event.preventDefault()
+  //   this.props.logOut()
+  // }
 
   render() {
     return (
@@ -28,7 +17,7 @@ class Header extends Component {
           <Link to={'/hot'} className="link">Gorące</Link>
           {this.props.isLogged ?
               <div className="link-right">
-                <button className="logout" onClick={this.handleLogOut}>
+                <button className="logout" onClick={this.props.logOut}>
                   Logout
                 </button>
                 <Link to={'/profile'} className="link ">Profile</Link>

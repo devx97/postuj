@@ -10,7 +10,6 @@ import backend from '../../apis/backend'
 
 const formatter = buildFormatter(polishStrings)
 
-
 class Blog extends Component {
   async componentDidMount() {
     try {
@@ -29,11 +28,14 @@ class Blog extends Component {
               post =>
                   <div key={post._id} className="postContainer">
                     <div className="avatar">
-                      <img src="https://media.giphy.com/media/B1IWXbj4Disow/200.gif" alt="avatar"/>
+                      <img
+                          src="https://media.giphy.com/media/B1IWXbj4Disow/200.gif"
+                          alt="avatar"/>
                     </div>
                     <div className="section-info underline">
                       <div className="item nick">{post.author}</div>
-                      <TimeAgo className="item time" date={post.createdAt} formatter={formatter}/>
+                      <TimeAgo className="item time" date={post.createdAt}
+                               formatter={formatter}/>
                       <div className="item plus-count item-right">5</div>
                       <button className="item btn-plus">+</button>
                     </div>

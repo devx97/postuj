@@ -10,7 +10,7 @@ const auth = (state = {isLogged: false, token: null, user: {}}, action) => {
       }
       localStorage.setItem('token', token);
       return {isLogged: true, token, user: {...decodedToken}}
-    case 'LOGOUT':
+    case 'LOGOUT_SUCCESS':
       localStorage.removeItem('token')
       return {isLogged: false, token: null, user: {}}
     default:

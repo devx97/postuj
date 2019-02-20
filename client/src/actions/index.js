@@ -1,28 +1,20 @@
+import {reset} from "redux-form";
 import backend from '../apis/backend'
+import {SubmissionError} from 'redux-form';
 
-export const addPost = content => dispatch => {
+export const addPost = content => (dispatch, getState) => {
   backend.post('/post/new', {
     content
   })
   .then(result => {
     dispatch(addPostSuccess(result.data))
+    dispatch(reset('newPost'))
   })
   .catch(error => {
-    console.log(error);
+    console.log(error.response.data.errors);
+    throw new SubmissionError(error.response.data.errors)
   })
 }
-
-export const checkToken = () => dispatch => {
-  backend.get('/auth/token')
-  .then(result => {
-    console.log('No need to dispatch login action because token is already in headers')
-  })
-  .catch(error => {
-    console.log('Provided token is probably invalid or 2 weeks old')
-    console.log(error.message)
-  })
-}
-
 
 const addPostSuccess = post => ({
   type: 'ADD_POST_SUCCESS',
@@ -39,6 +31,15 @@ export const logIn = token => ({
   token
 })
 
-export const logOut = () => ({
-  type: 'LOGOUT',
+export const logOut = () => async dispatch => {
+  try {
+    await backend.get('/auth/logout')
+    dispatch(logOutSuccess())
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export const logOutSuccess = () => ({
+  type: 'LOGOUT_SUCCESS'
 })

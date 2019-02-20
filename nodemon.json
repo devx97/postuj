@@ -2,6 +2,6 @@
   "env": {
     "DB_URI": "mongodb://localhost/postuj",
     "JWT_SECRET": "supersecretykey",
-    "JWT_TTL": "5s"
+    "JWT_TTL": "2s"
   }
 }

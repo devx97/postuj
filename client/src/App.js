@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import './App.css';
+import {Route} from "react-router-dom";
 import Header from "./components/layout/Header";
 import Blog from "./pages/posts/Blog";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
-import {Route} from "react-router-dom";
+
+import './App.css';
 
 class App extends Component {
   render() {

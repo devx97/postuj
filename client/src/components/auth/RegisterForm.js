@@ -1,11 +1,14 @@
-import React, {Component} from 'react';
-import {connect} from "react-redux";
-import {Field, reduxForm} from "redux-form";
-import {required, length, email, addValidator} from "redux-form-validators";
+import React, {Component} from 'react'
+import {connect} from "react-redux"
+import {Field, reduxForm} from "redux-form"
+import {required, length, email} from "redux-form-validators"
 import {register} from '../../actions'
 import usernameValidator from '../../helpers/usernameValidator'
 
 class RegisterForm extends Component {
+  passwordsMatch = (value, allValues) =>
+      value !== allValues.password ? 'Passwords don\'t match' : undefined;
+
   renderField = ({input, label, type, meta: {touched, error}}) =>
       <div className="auth-item">
         <label>{label}</label>
@@ -69,7 +72,8 @@ class RegisterForm extends Component {
                 validate={[
                   required({msg: 'Required.'}),
                   length({min: 6, msg: 'Minimum 6 characters.'}),
-                  length({max: 64, msg: 'Maximum 64 characters.'})
+                  length({max: 64, msg: 'Maximum 64 characters.'}),
+                  this.passwordsMatch,
                 ]}
             />
             <div className="auth-item btn">

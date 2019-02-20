@@ -5,6 +5,5 @@
     <file url="PROJECT" libraries="{@types/express, @types/node, postuj/client/node_modules, postuj/node_modules}" />
     <includedPredefinedLibrary name="HTTP Response Handler" />
     <includedPredefinedLibrary name="Node.js Core" />
-    <excludedPredefinedLibrary name="HTML" />
   </component>
 </project>

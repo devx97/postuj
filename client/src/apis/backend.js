@@ -1,8 +1,7 @@
 import axios from "axios";
 import store from '../store'
-import {logIn, logOut} from "../actions";
+import {logInWithToken, logOut} from "../actions";
 import jwtdecode from 'jwt-decode'
-import {history} from '../ExtendedBrowserRouter'
 
 const backend = axios.create({
   baseURL: 'http://localhost:5000/api',
@@ -26,9 +25,9 @@ backend.interceptors.request.use(request => {
 backend.interceptors.response.use(
     result => {
       if (result.headers.jwt) {
-        store.dispatch(logIn(result.headers.jwt))
+        store.dispatch(logInWithToken(result.headers.jwt))
       } else if (localStorage.getItem('token')) {
-        store.dispatch(logIn(localStorage.getItem('token')))
+        store.dispatch(logInWithToken(localStorage.getItem('token')))
       }
       return result
     },
@@ -37,9 +36,9 @@ backend.interceptors.response.use(
         store.dispatch(logOut())
       } else {
         if (err.response.headers.jwt) {
-          store.dispatch(logIn(err.response.headers.jwt))
+          store.dispatch(logInWithToken(err.response.headers.jwt))
         } else if (localStorage.getItem('token')) {
-          store.dispatch(logIn(localStorage.getItem('token')))
+          store.dispatch(logInWithToken(localStorage.getItem('token')))
         }
       }
       return Promise.reject(err)

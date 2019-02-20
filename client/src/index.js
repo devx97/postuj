@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import {Provider} from 'react-redux'
-import {checkToken, logIn} from "./actions";
+import {logInWithToken} from "./actions";
 import jwtdecode from 'jwt-decode'
 import store from './store'
 import ExtendedBrowserRouter, {history} from "./ExtendedBrowserRouter";
@@ -14,7 +14,7 @@ if (token && token.split(' ')[0] === 'Bearer') {
   const decodedToken = jwtdecode(token)
   if (Date.now() / 1000 < decodedToken.exp - 0) {
     console.log('Logging in with good token.')
-    store.dispatch(logIn(token))
+    store.dispatch(logInWithToken(token))
   } else if ((Date.now() / 1000) - decodedToken.exp > 2 * 60 * 60) {
     localStorage.removeItem('token')
   } else {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import NewPost from "../../components/posts/NewPost";
+import NewPostForm from "../../components/posts/NewPostForm";
 import {connect} from 'react-redux'
 import {addPosts} from "../../actions";
 import './Blog.css'
@@ -23,7 +23,7 @@ class Blog extends Component {
   render() {
     return (
         <div className="blog">
-          {this.props.isLogged ? <NewPost/> : ''}
+          {this.props.isLogged ? <NewPostForm/> : undefined}
           {this.props.posts.map(
               post =>
                   <div key={post._id} className="postContainer">

@@ -3,6 +3,8 @@ import './NewPost.css'
 import Textarea from 'react-textarea-autosize'
 import {Field, reduxForm} from 'redux-form'
 import {required, length} from "redux-form-validators";
+import {addPost} from '../../actions'
+import {connect} from "react-redux";
 
 class NewPostForm extends Component {
   generateTextarea = ({input, meta: {touched, error}}) =>
@@ -19,8 +21,10 @@ class NewPostForm extends Component {
       </React.Fragment>
 
   render() {
+    const {handleSubmit, addPost} = this.props
     return (
-        <form className="container" onSubmit={this.props.handleSubmit}>
+        <form className="container"
+              onSubmit={handleSubmit(addPost)}>
           <Field
               htmlFor="newPost"
               name="newPost"
@@ -36,6 +40,15 @@ class NewPostForm extends Component {
     );
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  addPost: post => dispatch(addPost(post))
+})
+
+NewPostForm = connect(
+    null,
+    mapDispatchToProps
+)(NewPostForm)
 
 export default NewPostForm = reduxForm({
   form: 'newPost',

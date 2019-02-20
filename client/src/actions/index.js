@@ -2,19 +2,18 @@ import {reset} from "redux-form";
 import backend from '../apis/backend'
 import {SubmissionError} from 'redux-form';
 
-export const addPost = content => (dispatch, getState) => {
-  backend.post('/post/new', {
-    content
-  })
-  .then(result => {
-    dispatch(addPostSuccess(result.data))
-    dispatch(reset('newPost'))
-  })
-  .catch(error => {
-    console.log(error.response.data.errors);
-    throw new SubmissionError(error.response.data.errors)
-  })
-}
+export const addPost = content => dispatch =>
+    backend.post('/post/new', {
+      content: content.newPost
+    })
+    .then(result => {
+      dispatch(addPostSuccess(result.data))
+      dispatch(reset('newPost'))
+    })
+    .catch(error => {
+      console.log(error.response.data.errors)
+      throw new SubmissionError({newPost: 'XD'})
+    })
 
 const addPostSuccess = post => ({
   type: 'ADD_POST_SUCCESS',

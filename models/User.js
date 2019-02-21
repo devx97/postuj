@@ -17,7 +17,10 @@ const postSchema = new Schema({
   posts: {
     type: [Schema.Types.ObjectId],
     ref: 'Post'
-  }
+  },
+  resetToken: {
+    type: String,
+  },
 }, {timestamps: true})
 
 

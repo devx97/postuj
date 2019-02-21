@@ -1,4 +1,6 @@
 .auth-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   margin: 20px auto;
   width: 400px;
   border: 1px solid #666;
@@ -30,11 +32,22 @@ button {
 
 
 .auth-item {
+  grid-column: span 2;
   margin: 5px 10px;
 }
 
-.btn {
-  padding: 5px 0;
+.auth-item:nth-last-child(2), .auth-item:last-child {
+  grid-column: span 1;
+  margin-bottom: 8px;
+}
+
+.auth-left {
+  float: left;
+}
+
+.auth-right {
+  color: #ccc;
+  float: right;
 }
 
 .error {

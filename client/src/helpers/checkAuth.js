@@ -8,7 +8,7 @@ export default () =>{
   const token = localStorage.getItem('token');
   if (token && token.split(' ')[0] === 'Bearer') {
     const decodedToken = jwtdecode(token)
-    if (Date.now() / 1000 < decodedToken.exp - 0) {
+    if (Date.now() / 1000 < decodedToken.exp) {
       console.log('Logging in with good token.')
       store.dispatch(logInWithToken(token))
     } else if ((Date.now() / 1000) - decodedToken.exp > 2 * 60 * 60) {
@@ -17,7 +17,7 @@ export default () =>{
       console.log('Checking if token is valid and refreshing if possible')
       backend.get('/auth/token')
       .then(res => {
-        console.log('Logged in.')
+        console.log('Got new token, logging in.')
       })
       .catch(err => {
         if (err.response.status === 401) {

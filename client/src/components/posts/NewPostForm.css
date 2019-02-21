@@ -39,3 +39,7 @@
 .error {
   border: 3px solid red;
 }
+
+.error-message {
+  float: left;
+}

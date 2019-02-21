@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
 import {Route} from "react-router-dom"
 
+import Header from "./components/layout/Header"
 import Blog from "./pages/posts/Blog"
 import Login from "./pages/auth/Login"
-import Register from "./pages/auth/Register"
+import Register from './pages/auth/Register'
 import ForgotPassword from "./pages/auth/ForgotPassword"
-import Header from "./components/layout/Header"
+import ResetPassword from './pages/auth/ResetPassword'
 import './App.css'
 
 class App extends Component {
@@ -20,6 +21,7 @@ class App extends Component {
             <Route exact path="/login" component={Login}/>
             <Route exact path="/register" component={Register}/>
             <Route exact path="/forgot-password" component={ForgotPassword}/>
+            <Route exact path="/reset-password/:resetToken" component={ResetPassword}/>
           </div>
         </React.Fragment>
     )

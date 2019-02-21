@@ -19,7 +19,7 @@ class NewPostForm extends Component {
           onChange={event =>
               input.onChange(event.target.value)
           }/>
-        {touched && error && <div>{error}</div>}
+        {touched && error && <div className="error-message">{error}</div>}
       </React.Fragment>
 
   render() {

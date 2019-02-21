@@ -1,12 +1,16 @@
 const {validationResult} = require('express-validator/check')
 const bcrypt = require('bcryptjs')
 const sha256 = require('sha256')
+const sgMail = require('@sendgrid/mail')
+const jwt = require('jsonwebtoken')
 
 const Token = require('../models/Token')
 const User = require('../models/User')
 
 const generateToken = require('../helpers/generateToken')
 const submissionErrorFormatter = require('../helpers/submissionErrorFormatter')
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 exports.register = async (req, res, next) => {
   const errors = validationResult(req).formatWith(submissionErrorFormatter)
@@ -33,16 +37,17 @@ exports.register = async (req, res, next) => {
 }
 
 exports.login = async (req, res, next) => {
-  const {email, password} = req.body
-  try {
-    const user = await User.findOne({email})
-    if (!user) {
-      return res.status(422).json({
-        message: 'Validation failed, entered data is incorrect.',
-        errors: {email: 'Email not found.'}
-      })
-    }
+  const errors = validationResult(req).formatWith(submissionErrorFormatter)
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      message: 'Validation failed, entered data is incorrect.',
+      errors: errors.mapped()
+    })
+  }
 
+  const {password} = req.body
+  try {
+    const user = req.user
     const isEqual = await bcrypt.compare(password, user.password)
     if (!isEqual) {
       return res.status(422).json({
@@ -77,22 +82,14 @@ exports.logOut = async (req, res, next) => {
   return res.json({message: 'Logged out', success: true})
 }
 
-exports.token = async (req, res, next) => {
-  try {
-    // const user = await User.findById(req.userId)
-    // .select('_id name')
-    return res.json({
+exports.token = async (req, res, next) =>
+    res.json({
       user: {_id: req.userId, username: req.username},
       message: 'Authorized!',
       success: true
     })
-  } catch (err) {
-    console.log(err);
-    next(err)
-  }
-}
 
-exports.forgotPassword = (req, res, next) => {
+exports.forgotPassword = async (req, res, next) => {
   const errors = validationResult(req).formatWith(submissionErrorFormatter)
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -100,5 +97,36 @@ exports.forgotPassword = (req, res, next) => {
       errors: errors.mapped()
     })
   }
-  res.json({test: 'xD'})
+  try {
+    const user = req.user
+    const resetToken = generateToken(user._id, user.username)
+    const msg = {
+      to: req.body.email,
+      from: 'mail@postuj.pl',
+      subject: 'Postuj.pl - Password reset',
+      text: 'If it\'s not you, someone is trying to reset your password.',
+      html: `<strong>Reset token: <a href="http://localhost:3000/reset-password/${resetToken}">link</a></strong>`,
+    }
+    sgMail.send(msg)
+    res.json({test: 'xD'})
+  } catch (err) {
+    console.log(err.response.body)
+    next(err)
+  }
+}
+
+exports.resetPassword = async (req, res, next) => {
+  const {resetToken, password} = req.body
+  try {
+    const decodedToken = jwt.verify(resetToken, process.env.JWT_SECRET)
+    const user = await User.findOne({_id: decodedToken.userId})
+    user.password = await bcrypt.hash(password, 12)
+    await user.save()
+    console.log(user)
+    console.log('XD')
+    res.json({success: true})
+  } catch (err) {
+    console.log(err)
+    next(err)
+  }
 }

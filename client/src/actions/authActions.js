@@ -56,3 +56,15 @@ export const forgotPassword = form => async dispatch => {
     }
   }
 }
+
+export const resetPassword = form => async dispatch => {
+  try {
+    console.log(form)
+    await backend.post('/auth/reset-password', form)
+    console.log('success')
+  } catch (error) {
+    if (error.response.status === 422 && error.response.data.errors) {
+      throw new SubmissionError(error.response.data.errors)
+    }
+  }
+}

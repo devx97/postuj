@@ -34,9 +34,10 @@ router.put('/register',
       passwordValidator('password'),
       passwordValidator('password2')
       .custom((password2, {req}) => {
-        if (password2.toString() !== req.body.password.toString()) {
+        if (password2 !== req.body.password) {
           return Promise.reject('Passwords have to match')
         }
+        return true
       })
     ],
     authController.register
@@ -46,10 +47,11 @@ router.post(
     '/login',
     [
       emailValidator('email')
-      .custom(email => User.findOne({email}).then(userDoc => {
-            if (!userDoc) {
-              return Promise.reject('Email adress not found')
+      .custom((email, {req}) => User.findOne({email}).then(user => {
+            if (!user) {
+              return Promise.reject('Email adress not found.')
             }
+            req.user = user
           })
       ),
       passwordValidator('password')
@@ -60,13 +62,26 @@ router.post(
 router.post('/forgot-password',
     [
       emailValidator('email')
-      .custom(email => User.findOne({email}).then(userDoc => {
-        if (!userDoc) {
-          return Promise.reject('Email adress not found')
+      .custom((email, {req}) => User.findOne({email}).then(user => {
+        if (!user) {
+          return Promise.reject('Email adress not found.')
         }
+        req.user = user
       }))
     ],
     authController.forgotPassword)
+
+router.post('/reset-password',
+    [
+      passwordValidator('password'),
+      passwordValidator('password2')
+      .custom((password2, {req}) => {
+        if (password2 !== req.body.password) {
+          return Promise.reject('Passwords have to match')
+        }
+      })
+    ],
+    authController.resetPassword)
 
 router.get('/logout', authController.logOut)
 

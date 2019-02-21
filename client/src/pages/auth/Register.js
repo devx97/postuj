@@ -20,7 +20,6 @@ class Register extends Component {
         />
         {touched && error && <div>{error}</div>}
       </div>
-
   render() {
     return (
         <form
@@ -74,7 +73,7 @@ class Register extends Component {
                 required({msg: 'Required.'}),
                 length({min: 6, msg: 'Minimum 6 characters.'}),
                 length({max: 64, msg: 'Maximum 64 characters.'}),
-                passwordsMatch({msg: 'Passwords have to match.'}),
+                passwordsMatch({pass2name: 'password', msg: 'Passwords have to match.'}),
               ]}
           />
           <div className="auth-item">

@@ -3,7 +3,7 @@ const {body} = require('express-validator/check')
 const router = express.Router()
 
 const mainController = require('../controllers/index')
-const isAuth = require('../middleware/is-auth')
+const isAuth = require('../middlewares/is-auth')
 
 router.post('/post/new',
     isAuth,

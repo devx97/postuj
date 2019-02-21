@@ -8,8 +8,8 @@ export const usernameValidator = addValidator({
 })
 
 export const passwordsMatch = addValidator({
-  defaultMessage: "Passwords don't match.",
-  validator: (options, value, allValues) => value === allValues.password
+  defaultMessage: "DEV - Provide password field name. validator({pass2name: 'passwordFieldName'})",
+  validator: (options, value, allValues) => value === allValues[options.pass2name]
 })
 
 export const tokenValidator = addValidator({

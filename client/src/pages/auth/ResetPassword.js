@@ -28,6 +28,7 @@ class ResetPassword extends Component {
       </div>
 
   render() {
+    const linkToForgotPassword = <Link to={'/forgot-password'} style={{color: '#ccc'}}>Generate new token</Link>
     let resetTokenError
     if (this.props.resetPasswordForm
         && this.props.resetPasswordForm.syncErrors
@@ -38,7 +39,7 @@ class ResetPassword extends Component {
         <form className="auth-form"
               onSubmit={this.props.handleSubmit(this.props.resetPassword)}>
           <Field
-              name="password"
+              name="newPassword"
               label="New password"
               type="password"
               autoComplete="new-password"
@@ -50,7 +51,7 @@ class ResetPassword extends Component {
               ]}
           />
           <Field
-              name="password2"
+              name="newPassword2"
               label="Confirm new password"
               type="password"
               autoComplete="new-password"
@@ -59,7 +60,7 @@ class ResetPassword extends Component {
                 required({msg: 'Required.'}),
                 length({min: 6, msg: 'Minimum 6 characters.'}),
                 length({max: 64, msg: 'Maximum 64 characters.'}),
-                passwordsMatch({msg: 'Passwords have to match.'}),
+                // passwordsMatch({pass2name: 'newPassword', msg: 'Passwords have to match.'}),
               ]}
           />
           <Field
@@ -68,18 +69,18 @@ class ResetPassword extends Component {
               component="input"
               validate={[
                 required({msg: 'Required.'}),
-                tokenValidator(
-                    {msg: 'Token expired or invalid. Generate new token.'}),
+                // tokenValidator({msg: 'Token expired or invalid.'}),
               ]}
           />
-          {resetTokenError && <div className="auth-item"
-                                   style={{color: 'red'}}>{resetTokenError}</div>}
+          {resetTokenError && <div className="auth-item" style={{color: 'red'}}>
+            {resetTokenError} {linkToForgotPassword}
+          </div>}
           <div className="auth-item">
             <button type="submit">Send</button>
           </div>
           <div className="auth-item">
-            <Link to={'/forgot-password'} className={'auth-right'}>
-              Generate new token
+            <Link to={'/login'} className={'auth-right'}>
+              Log in instead
             </Link>
           </div>
         </form>

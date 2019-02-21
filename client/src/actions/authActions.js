@@ -49,7 +49,7 @@ export const forgotPassword = form => async dispatch => {
   try {
     console.log(form)
     await backend.post('/auth/forgot-password', form)
-    console.log('success')
+    return Promise.reject(new SubmissionError({email: "Email sent."}))
   } catch (error) {
     if (error.response.status === 422 && error.response.data.errors) {
       throw new SubmissionError(error.response.data.errors)
@@ -61,7 +61,8 @@ export const resetPassword = form => async dispatch => {
   try {
     console.log(form)
     await backend.post('/auth/reset-password', form)
-    console.log('success')
+    history.push('/')
+    history.push('/login')
   } catch (error) {
     if (error.response.status === 422 && error.response.data.errors) {
       throw new SubmissionError(error.response.data.errors)

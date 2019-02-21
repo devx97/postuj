@@ -1,4 +1,3 @@
-const {validationResult} = require('express-validator/check')
 const bcrypt = require('bcryptjs')
 const sha256 = require('sha256')
 const sgMail = require('@sendgrid/mail')
@@ -8,19 +7,10 @@ const Token = require('../models/Token')
 const User = require('../models/User')
 
 const generateToken = require('../helpers/generateToken')
-const submissionErrorFormatter = require('../helpers/submissionErrorFormatter')
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 exports.register = async (req, res, next) => {
-  const errors = validationResult(req).formatWith(submissionErrorFormatter)
-  if (!errors.isEmpty()) {
-    return res.status(422).json({
-      message: 'Validation failed, entered data is incorrect.',
-      errors: errors.mapped()
-    })
-  }
-
   const {username, email, password} = req.body
   try {
     const hashedPw = await bcrypt.hash(password, 12)
@@ -37,14 +27,6 @@ exports.register = async (req, res, next) => {
 }
 
 exports.login = async (req, res, next) => {
-  const errors = validationResult(req).formatWith(submissionErrorFormatter)
-  if (!errors.isEmpty()) {
-    return res.status(422).json({
-      message: 'Validation failed, entered data is incorrect.',
-      errors: errors.mapped()
-    })
-  }
-
   const {password} = req.body
   try {
     const user = req.user
@@ -90,13 +72,6 @@ exports.token = async (req, res, next) =>
     })
 
 exports.forgotPassword = async (req, res, next) => {
-  const errors = validationResult(req).formatWith(submissionErrorFormatter)
-  if (!errors.isEmpty()) {
-    return res.status(422).json({
-      message: 'Validation failed, entered data is incorrect.',
-      errors: errors.mapped()
-    })
-  }
   try {
     const user = req.user
     const resetToken = generateToken(user._id, user.username)
@@ -110,23 +85,21 @@ exports.forgotPassword = async (req, res, next) => {
     sgMail.send(msg)
     res.json({test: 'xD'})
   } catch (err) {
-    console.log(err.response.body)
     next(err)
   }
 }
 
 exports.resetPassword = async (req, res, next) => {
-  const {resetToken, password} = req.body
+  const {resetToken, newPassword} = req.body
   try {
     const decodedToken = jwt.verify(resetToken, process.env.JWT_SECRET)
     const user = await User.findOne({_id: decodedToken.userId})
-    user.password = await bcrypt.hash(password, 12)
+    user.password = await bcrypt.hash(newPassword, 12)
     await user.save()
-    console.log(user)
-    console.log('XD')
+    await Token.deleteMany({userId: decodedToken.userId})
+
     res.json({success: true})
   } catch (err) {
-    console.log(err)
     next(err)
   }
 }

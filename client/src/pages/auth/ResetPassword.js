@@ -60,7 +60,7 @@ class ResetPassword extends Component {
                 required({msg: 'Required.'}),
                 length({min: 6, msg: 'Minimum 6 characters.'}),
                 length({max: 64, msg: 'Maximum 64 characters.'}),
-                // passwordsMatch({pass2name: 'newPassword', msg: 'Passwords have to match.'}),
+                passwordsMatch({pass2name: 'newPassword', msg: 'Passwords have to match.'}),
               ]}
           />
           <Field
@@ -69,7 +69,7 @@ class ResetPassword extends Component {
               component="input"
               validate={[
                 required({msg: 'Required.'}),
-                // tokenValidator({msg: 'Token expired or invalid.'}),
+                tokenValidator({msg: 'Token expired or invalid.'}),
               ]}
           />
           {resetTokenError && <div className="auth-item" style={{color: 'red'}}>

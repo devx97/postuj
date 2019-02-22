@@ -3,7 +3,7 @@ import jwtdecode from 'jwt-decode'
 
 export const usernameValidator = addValidator({
   defaultMessage: "Invalid username.",
-  validator: (options, value, allValues) =>
+  validator: (options, value) =>
       /^[a-zA-Z0-9]+([-_][a-zA-Z0-9]+)*[a-zA-Z0-9]$/.test(value)
 })
 
@@ -14,7 +14,7 @@ export const passwordsMatch = addValidator({
 
 export const tokenValidator = addValidator({
   defaultMessage: "Token expired or invalid.",
-  validator: (options, value, allValues) => {
+  validator: (options, value) => {
     try {
       const decodedToken = jwtdecode(value)
       if (decodedToken.exp > Date.now() / 1000) {

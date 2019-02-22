@@ -6,7 +6,7 @@ import {LOGIN_WITH_TOKEN, LOGOUT_SUCCESS} from './types'
 
 export const register = form => () =>
     backend.put('/auth/register', form)
-    .then(result => {
+    .then(() => {
       history.push('/')
       history.push('/login')
     })
@@ -18,9 +18,7 @@ export const register = form => () =>
 
 export const logIn = form => () =>
     backend.post('/auth/login', form)
-    .then(result => {
-      history.goBack()
-    })
+    .then(history.goBack)
     .catch(error => {
       if (error.response.status === 422 && error.response.data.errors) {
         throw new SubmissionError(error.response.data.errors)
@@ -35,17 +33,17 @@ export const logInWithToken = token => ({
 export const logOut = () => async dispatch => {
   try {
     await backend.get('/auth/logout')
-    dispatch(logOutSuccess())
   } catch (err) {
     console.log(err)
   }
+  dispatch(logOutSuccess())
 }
 
 const logOutSuccess = () => ({
   type: LOGOUT_SUCCESS
 })
 
-export const forgotPassword = form => async dispatch => {
+export const forgotPassword = form => async () => {
   try {
     console.log(form)
     await backend.post('/auth/forgot-password', form)
@@ -57,7 +55,7 @@ export const forgotPassword = form => async dispatch => {
   }
 }
 
-export const resetPassword = form => async dispatch => {
+export const resetPassword = form => async () => {
   try {
     console.log(form)
     await backend.post('/auth/reset-password', form)

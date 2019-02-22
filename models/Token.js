@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const tokenSchema = new Schema({
   userId: {
-    type: Schema.Types.ObjectId,
+    type: Number,
     ref: 'User',
     required: true,
   },
@@ -13,8 +13,7 @@ const tokenSchema = new Schema({
   },
   expire_at: {
     type: Date,
-    default: Date.now,
-    expires: 14 * 24 * 60 * 60, // 14 days
+    expires: 24 * 60 * 60, // 1 day, will change this to 7days in prod
   }
 })
 

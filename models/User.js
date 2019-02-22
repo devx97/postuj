@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const AutoIncrement = require('mongoose-auto-increment')
 
-const postSchema = new Schema({
+AutoIncrement.initialize(mongoose)
+
+const userSchema = new Schema({
   username: {
     type: String,
     required: true,
@@ -15,13 +18,23 @@ const postSchema = new Schema({
     required: true,
   },
   posts: {
-    type: [Schema.Types.ObjectId],
+    type: [Number],
     ref: 'Post'
   },
-  resetToken: {
-    type: String,
+  comments: {
+    type: [Schema.Types.ObjectId],
+    ref: 'Comment',
   },
-}, {timestamps: true})
+  blacklistedPeople: {
+    type: [Number],
+    ref: 'User'
+  },
+  blacklistedTags: {
+    type: [String],
+    ref: 'Tag'
+  }
+}, {_id: false, timestamps: true})
 
+userSchema.plugin(AutoIncrement.plugin, 'User')
 
-module.exports = User = mongoose.model('User', postSchema)
+module.exports = User = mongoose.model('User', userSchema)

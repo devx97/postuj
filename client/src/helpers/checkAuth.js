@@ -16,7 +16,7 @@ export default () =>{
     } else {
       console.log('Checking if token is valid and refreshing if possible')
       backend.get('/auth/token')
-      .then(res => {
+      .then(() => {
         console.log('Got new token, logging in.')
       })
       .catch(err => {

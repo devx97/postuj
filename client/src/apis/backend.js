@@ -34,6 +34,8 @@ backend.interceptors.response.use(
       return result
     },
     err => {
+      if  (err.message.startsWith('timeout'))
+        return Promise.reject(err)
       if (err.response.status === 401) {
         store.dispatch(logOut())
       } else {

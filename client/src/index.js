@@ -4,7 +4,7 @@ import {Provider} from 'react-redux'
 
 import store from './store'
 import checkAuth from './helpers/checkAuth'
-import ExtendedBrowserRouter, {history} from "./router/ExtendedBrowserRouter"
+import ExtendedBrowserRouter, {history} from "./routes/ExtendedBrowserRouter"
 import App from './App'
 import './index.css'
 

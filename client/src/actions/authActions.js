@@ -1,11 +1,11 @@
 import {SubmissionError} from "redux-form"
 
 import backend from "../apis/backend"
-import {history} from "../router/ExtendedBrowserRouter"
+import {history} from "../routes/ExtendedBrowserRouter"
 import {LOGIN_WITH_TOKEN, LOGOUT_SUCCESS} from './types'
 
 export const register = form => () =>
-    backend.put('/auth/register', form)
+    backend.post('/auth/register', form)
     .then(() => {
       history.push('/')
       history.push('/login')

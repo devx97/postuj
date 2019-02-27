@@ -25,6 +25,18 @@
   border-radius: 15px;
 }
 
+.thread {
+  margin: 10px 0;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+}
+
+.show-more {
+  width: 100%;
+  text-align: center;
+}
+
 .section-info {
   padding: 5px 0;
   display: grid;

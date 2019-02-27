@@ -32,20 +32,24 @@ export const addPosts = posts => ({
   posts
 })
 
-export const plusPost = postId => dispatch =>
-    backend.post('/post/plus/', {postId})
+export const plusPost = (postId, commentId) => dispatch =>
+    backend.post('/post/plus/', {postId, commentId})
     .then(result => {
-      dispatch(plusPostSuccess(result.data))
+      dispatch(plusPostSuccess(postId, commentId, result.data.pluses))
     })
 
-const plusPostSuccess = ({postId, pluses}) => ({
+const plusPostSuccess = (postId, commentId, pluses) => ({
   type: PLUS_POST_SUCCESS,
   postId,
+  commentId,
   pluses,
 })
 
-export const reply = ({content}, postId) => dispatch =>
-    backend.post('/post/new-comment', {postId, content})
+export const reply = ({postId, content}) => dispatch => {
+  console.log(postId)
+  console.log(content)
+
+  return backend.post('/post/new-comment', {postId, content})
     .then(result => {
       dispatch(addCommentSuccess(result.data, postId))
       dispatch(reset(`form-postId-${postId}`))
@@ -55,6 +59,7 @@ export const reply = ({content}, postId) => dispatch =>
         throw new SubmissionError(error.response.data.errors)
       }
     })
+  }
 
 const addCommentSuccess = (newComment, postId) => ({
   type: ADD_COMMENT_SUCCESS,

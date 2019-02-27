@@ -9,14 +9,21 @@ const posts = (state = [], action) => {
     case PLUS_POST_SUCCESS:
       return state.map(post => {
         if (post.postId === action.postId) {
-          post.pluses = action.pluses
+          if (action.commentId) {
+            post.comments[action.commentId - 1].pluses = action.pluses
+          } else {
+            post.pluses = action.pluses
+          }
         }
         return post
       })
     case ADD_COMMENT_SUCCESS:
-      console.log(action.newComment)
-      console.log(action.postId)
-      return state
+      return state.map(post => {
+        if (post.postId === action.postId) {
+          post.comments.push(action.newComment)
+        }
+        return post
+      })
     default:
       return state
   }

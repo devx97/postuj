@@ -7,10 +7,6 @@ import Textarea from 'react-textarea-autosize'
 import {reply} from '../../actions'
 
 class ReplyForm extends Component {
-  handleReply = values => {
-    this.props.reply(values, this.props.postId)
-  }
-
   generateTextarea = ({input, meta: {touched, error}}) =>
       <React.Fragment>
       <Textarea
@@ -25,10 +21,11 @@ class ReplyForm extends Component {
       </React.Fragment>
 
   render() {
-    const {handleSubmit} = this.props
+    const {handleSubmit, reply} = this.props
+    console.log(this.props.initialValues)
     return (
         <form className="container"
-              onSubmit={handleSubmit(this.handleReply)}>
+              onSubmit={handleSubmit(reply)}>
           <Field
               name="content"
               validate={[
@@ -38,22 +35,27 @@ class ReplyForm extends Component {
               ]}
               component={this.generateTextarea}
           />
-          <input className="submit" type="submit" value={'Wyślij'}/>
+          <Field name="postId" type="hidden" component="input"/>
+          <input className="submit" type="submit" value={'Send'}/>
         </form>
     )
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  reply: (post, postId) => dispatch(reply(post, postId))
+const mapStateToProps = (state, ownProps) => ({
+  initialValues: {postId: ownProps.postId}
 })
 
-ReplyForm = connect(
-    null,
-    mapDispatchToProps
-)(ReplyForm)
+const mapDispatchToProps = dispatch => ({
+  reply: post => dispatch(reply(post))
+})
 
-export default ReplyForm = reduxForm({
-  form: 'reply',
+ReplyForm = reduxForm({
+  enableReinitialize: true,
   destroyOnUnmount: false
 })(ReplyForm)
+
+export default ReplyForm = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ReplyForm)

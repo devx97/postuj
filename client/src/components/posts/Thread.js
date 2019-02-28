@@ -1,10 +1,12 @@
 import React, {useState} from 'react'
+import {connect} from 'react-redux'
 
 import Post from './Post'
-import ReplyForm from './ReplyForm'
+import {reply} from '../../actions'
+import PostForm from './PostForm'
 
-const Thread = ({post}) => {
-  const [reply, changeReply] = useState(false)
+const Thread = ({post, reply}) => {
+  const [replyMode, changeReplyMode] = useState(false)
   const [bestTwo, changeBestTwo] = useState(post.comments.length > 2)
 
   let comments
@@ -22,11 +24,15 @@ const Thread = ({post}) => {
     comments = post.comments
   }
 
+  const handleReply = values => {
+    return reply(values)
+  }
+
   return (
       <div className="thread">
         <Post
             key={post.postId}
-            handleReply={() => changeReply(true)}
+            handleReply={() => changeReplyMode(true)}
             post={post}
             postId={post.postId}
         />
@@ -34,7 +40,7 @@ const Thread = ({post}) => {
           {comments.map(comment =>
               <Post
                   key={comment.commentId}
-                  handleReply={() => changeReply(!reply)}
+                  handleReply={() => changeReplyMode(!replyMode)}
                   post={comment}
                   postId={post.postId}
               />)}
@@ -48,13 +54,20 @@ const Thread = ({post}) => {
         </div>
         }
         {
-          reply &&
+          replyMode &&
           <div className="reply">
-            <ReplyForm form={`form-postId-${post.postId}`} postId={post.postId}/>
+            <PostForm submitBtn onSubmit={handleReply} form={`form-postId-${post.postId}`}/>
           </div>
         }
       </div>
   )
 }
 
-export default Thread;
+const mapDispatchToProps = dispatch => ({
+  reply: post => dispatch(reply(post))
+})
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(Thread)

@@ -1,19 +1,16 @@
 import React, {Component} from 'react'
-import {connect} from "react-redux"
 import {Field, reduxForm} from 'redux-form'
 import {required, length} from "redux-form-validators"
 import Textarea from 'react-textarea-autosize'
 
-import {addPost} from '../../actions'
-
 import './Posts.css'
 
-class NewPostForm extends Component {
+class PostForm extends Component {
   generateTextarea = ({input, meta: {touched, error}}) =>
       <React.Fragment>
       <Textarea
           className={`textarea ${touched && error && 'error'}`}
-          minRows={4}
+          minRows={3}
           maxRows={30}
           value={input.value}
           onChange={event =>
@@ -23,10 +20,9 @@ class NewPostForm extends Component {
       </React.Fragment>
 
   render() {
-    const {handleSubmit, addPost} = this.props
     return (
         <form className="container"
-              onSubmit={handleSubmit(addPost)}>
+              onSubmit={this.props.handleSubmit}>
           <Field
               name="content"
               validate={[
@@ -36,22 +32,14 @@ class NewPostForm extends Component {
               ]}
               component={this.generateTextarea}
           />
-          <input className="submit" type="submit" value={'Wyślij'}/>
+          {this.props.cancelBtn && <input className="submit" type="submit" value={'Cancel'}/>}
+          {this.props.submitBtn && <input className="submit" type="submit" value={'Wyślij'}/>}
         </form>
     )
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  addPost: post => dispatch(addPost(post))
-})
-
-NewPostForm = connect(
-    null,
-    mapDispatchToProps
-)(NewPostForm)
-
-export default NewPostForm = reduxForm({
-  form: 'newPost',
+export default PostForm = reduxForm({
+  enableReinitialize: true,
   destroyOnUnmount: false
-})(NewPostForm)
+})(PostForm)

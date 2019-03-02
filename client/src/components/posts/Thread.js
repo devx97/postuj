@@ -6,7 +6,7 @@ import {reply} from '../../actions'
 import PostForm from './PostForm'
 
 const Thread = ({post, reply}) => {
-  const [replyMode, changeReplyMode] = useState(false)
+  const [replyMode, setReplyMode] = useState(false)
   const [bestTwo, changeBestTwo] = useState(post.comments.length > 2)
 
   let comments
@@ -15,7 +15,6 @@ const Thread = ({post, reply}) => {
     bestComments.sort((comment, comment2) =>
         comment2.pluses - comment.pluses)
     const bestTwoComments = bestComments.slice(0, 2)
-    console.log(bestTwoComments)
     bestTwoComments.sort((comment, comment2) =>
         new Date(comment.createdAt) - new Date(comment2.createdAt)
     )
@@ -24,15 +23,15 @@ const Thread = ({post, reply}) => {
     comments = post.comments
   }
 
-  const handleReply = values => {
-    return reply(values)
+  const handleReply = ({content}) => {
+    return reply(post.postId, content)
   }
 
   return (
       <div className="thread">
         <Post
             key={post.postId}
-            handleReply={() => changeReplyMode(true)}
+            handleReply={() => setReplyMode(true)}
             post={post}
             postId={post.postId}
         />
@@ -40,7 +39,7 @@ const Thread = ({post, reply}) => {
           {comments.map(comment =>
               <Post
                   key={comment.commentId}
-                  handleReply={() => changeReplyMode(!replyMode)}
+                  handleReply={() => setReplyMode(true)}
                   post={comment}
                   postId={post.postId}
               />)}
@@ -56,7 +55,10 @@ const Thread = ({post, reply}) => {
         {
           replyMode &&
           <div className="reply">
-            <PostForm submitBtn onSubmit={handleReply} form={`form-postId-${post.postId}`}/>
+            <PostForm cancel={() => setReplyMode(false)}
+                      submitBtn onSubmit={handleReply}
+                      form={`form-p-${post.postId}`}
+            />
           </div>
         }
       </div>
@@ -64,7 +66,7 @@ const Thread = ({post, reply}) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  reply: post => dispatch(reply(post))
+  reply: (postId, content) => dispatch(reply(postId, content))
 })
 
 export default connect(

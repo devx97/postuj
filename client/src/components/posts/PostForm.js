@@ -11,6 +11,7 @@ class PostForm extends Component {
       <Textarea
           className={`textarea ${touched && error && 'error'}`}
           minRows={3}
+          autoFocus
           maxRows={30}
           value={input.value}
           onChange={event =>
@@ -32,8 +33,8 @@ class PostForm extends Component {
               ]}
               component={this.generateTextarea}
           />
-          {this.props.cancelBtn && <input className="submit" type="submit" value={'Cancel'}/>}
-          {this.props.submitBtn && <input className="submit" type="submit" value={'Wyślij'}/>}
+          {this.props.submitBtn && <input className="submit" type="submit" value={'Send'}/>}
+          {this.props.cancel && <button className="submit" onClick={this.props.cancel} value={'Cancel'}>Cancel</button>}
         </form>
     )
   }

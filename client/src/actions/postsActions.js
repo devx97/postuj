@@ -1,7 +1,7 @@
 import {reset, SubmissionError} from "redux-form"
 
 import backend from "../apis/backend"
-import {ADD_COMMENT_SUCCESS, ADD_POST_SUCCESS, ADD_POSTS, PLUS_POST_SUCCESS} from "./types"
+import {ADD_COMMENT_SUCCESS, ADD_POST_SUCCESS, ADD_POSTS, PLUS_POST_SUCCESS, EDIT_POST_SUCCESS} from "./types"
 
 export const addPost = ({content}) => dispatch =>
     backend.post('/post/new', {content})
@@ -45,24 +45,42 @@ const plusPostSuccess = (postId, commentId, pluses) => ({
   pluses,
 })
 
-export const reply = ({postId, content}) => dispatch => {
-  console.log(postId)
-  console.log(content)
-
+export const reply = (postId, content) => dispatch => {
   return backend.post('/post/new-comment', {postId, content})
-    .then(result => {
-      dispatch(addCommentSuccess(result.data, postId))
-      dispatch(reset(`form-postId-${postId}`))
-    })
-    .catch(error => {
-      if (error.response.status === 422 && error.response.data.errors) {
-        throw new SubmissionError(error.response.data.errors)
-      }
-    })
-  }
+  .then(result => {
+    dispatch(addCommentSuccess(result.data, postId))
+    dispatch(reset(`form-p-${postId}`))
+  })
+  .catch(error => {
+    if (error.response.status === 422 && error.response.data.errors) {
+      throw new SubmissionError(error.response.data.errors)
+    }
+  })
+}
 
 const addCommentSuccess = (newComment, postId) => ({
   type: ADD_COMMENT_SUCCESS,
   newComment,
   postId
+})
+
+export const editPost = (content, postId, commentId) => dispatch =>
+    backend.post('/post/edit', {content, postId, commentId})
+    .then(result => {
+      console.log(result.data)
+      dispatch(editPostSuccess(content, postId, commentId))
+    })
+    .catch(error => {
+      if (error.response.status === 422 && error.response.data.errors) {
+        throw new SubmissionError(error.response.data.errors)
+      } else {
+        console.log(error)
+      }
+    })
+
+const editPostSuccess = (content, postId, commentId) => ({
+  type: EDIT_POST_SUCCESS,
+  content,
+  postId,
+  commentId,
 })

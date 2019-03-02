@@ -39,7 +39,7 @@ const mapDispatchToProps = dispatch => ({
   plusPost: postId => dispatch(plusPost(postId))
 })
 
-export default connect(
+export default Blog = connect(
     mapStateToProps,
     mapDispatchToProps,
 )(Blog)

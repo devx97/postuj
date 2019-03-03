@@ -1,7 +1,13 @@
 import {reset, SubmissionError} from "redux-form"
 
 import backend from "../apis/backend"
-import {ADD_COMMENT_SUCCESS, ADD_POST_SUCCESS, ADD_POSTS, PLUS_POST_SUCCESS, EDIT_POST_SUCCESS} from "./types"
+import {
+  ADD_COMMENT_SUCCESS,
+  ADD_POST_SUCCESS,
+  ADD_POSTS,
+  PLUS_POST_SUCCESS,
+  EDIT_POST_SUCCESS,
+} from "./types"
 
 export const addPost = ({content}) => dispatch =>
     backend.post('/post/new', {content})
@@ -27,7 +33,14 @@ export const fetchPosts = () => dispatch =>
     })
     .catch(console.log)
 
-export const addPosts = posts => ({
+export const fetchPost = postId => dispatch =>
+    backend.get(`/post/${postId}`)
+    .then(result => {
+      dispatch(addPosts([result.data]))
+    })
+    .catch(console.log)
+
+const addPosts = posts => ({
   type: ADD_POSTS,
   posts
 })

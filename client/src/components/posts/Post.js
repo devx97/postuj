@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux'
 import {change, formValueSelector} from 'redux-form'
+import Linkify from 'react-linkify'
 
 import TimeAgo from 'react-timeago'
 import polishStrings from 'react-timeago/lib/language-strings/pl'
@@ -54,7 +55,12 @@ const Post = ({post, handleReply, change, plusPost, postId, username, replyConte
         :
         <div>
           <div className="section">
-            {post.content}
+            <Linkify>
+              {post.content.replace(
+                  /@([a-zA-Z0-9]+([-_][a-zA-Z0-9]+)*[a-zA-Z0-9])/g,
+                  "<a href='/u/$1' target='_blank'>@$1</a>"
+              )}
+            </Linkify>
           </div>
           {username === post.author
           && <button onClick={() => changeEditMode(true)}>Edit</button>}

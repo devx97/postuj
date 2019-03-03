@@ -3,6 +3,7 @@ import {Route} from "react-router-dom"
 
 import Header from "./components/layout/Header"
 import Blog from "./pages/posts/Blog"
+import SingleThread from './pages/posts/SingleThread'
 import Login from "./pages/auth/Login"
 import Register from './pages/auth/Register'
 import ForgotPassword from "./pages/auth/ForgotPassword"
@@ -18,6 +19,8 @@ class App extends Component {
           </div>
           <div className="content">
             <Route exact path="/" component={Blog}/>
+            <Route exact path="/p/:postId" component={SingleThread}/>
+            <Route exact path="/p/:postId/:commentId" component={SingleThread}/>
             <Route exact path="/login" component={Login}/>
             <Route exact path="/register" component={Register}/>
             <Route exact path="/forgot-password" component={ForgotPassword}/>

@@ -8,6 +8,7 @@
     "jwt-decode": "^2.2.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
+    "react-linkify": "^0.2.2",
     "react-redux": "^6.0.1",
     "react-router-dom": "^4.4.0-beta.6",
     "react-scripts": "2.1.5",

@@ -6,6 +6,8 @@ import store from './store'
 import checkAuth from './helpers/checkAuth'
 import ExtendedBrowserRouter, {history} from "./routes/ExtendedBrowserRouter"
 import App from './App'
+
+import 'semantic-ui-css/semantic.min.css'
 import './index.css'
 
 checkAuth()

@@ -9,15 +9,14 @@ import Register from './pages/auth/Register'
 import ForgotPassword from "./pages/auth/ForgotPassword"
 import ResetPassword from './pages/auth/ResetPassword'
 import './App.css'
+import {Container, Segment} from 'semantic-ui-react'
 
 class App extends Component {
   render() {
     return (
         <React.Fragment>
-          <div className="header">
-            <Header/>
-          </div>
-          <div className="content">
+          <Header/>
+          <Container inverted style={{marginTop: '50px'}}>
             <Route exact path="/" component={Blog}/>
             <Route exact path="/p/:postId" component={SingleThread}/>
             <Route exact path="/p/:postId/:commentId" component={SingleThread}/>
@@ -25,7 +24,7 @@ class App extends Component {
             <Route exact path="/register" component={Register}/>
             <Route exact path="/forgot-password" component={ForgotPassword}/>
             <Route exact path="/reset-password/:resetToken" component={ResetPassword}/>
-          </div>
+          </Container>
         </React.Fragment>
     )
   }

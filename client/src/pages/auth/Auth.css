@@ -23,13 +23,6 @@ input {
   height: 25px;
 }
 
-button {
-  border-radius: 5px;
-  font-size: 18px;
-  width: 100px;
-  height: 25px;
-}
-
 
 .auth-item {
   grid-column: span 2;

@@ -28,7 +28,7 @@ const Thread = ({post, reply}) => {
   }
 
   return (
-      <div className="thread">
+      <React.Fragment>
         <Post
             key={post.postId}
             handleReply={() => setReplyMode(true)}
@@ -61,7 +61,7 @@ const Thread = ({post, reply}) => {
             />
           </div>
         }
-      </div>
+      </React.Fragment>
   )
 }
 

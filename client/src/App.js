@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {Route} from "react-router-dom"
+import { hot } from 'react-hot-loader'
 
 import Header from "./components/layout/Header"
 import Blog from "./pages/posts/Blog"
@@ -8,15 +9,14 @@ import Login from "./pages/auth/Login"
 import Register from './pages/auth/Register'
 import ForgotPassword from "./pages/auth/ForgotPassword"
 import ResetPassword from './pages/auth/ResetPassword'
-import './App.css'
-import {Container, Segment} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react'
 
 class App extends Component {
   render() {
     return (
         <React.Fragment>
           <Header/>
-          <Container inverted style={{marginTop: '50px'}}>
+          <Container text style={{marginTop: '50px'}}>
             <Route exact path="/" component={Blog}/>
             <Route exact path="/p/:postId" component={SingleThread}/>
             <Route exact path="/p/:postId/:commentId" component={SingleThread}/>
@@ -30,4 +30,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default hot(module)(App)

@@ -15,7 +15,7 @@ const {
   emailExistsValidator,
   emailTakenValidator,
   tokenValidator
-} = require('../helpers/validators')
+} = require('../helpers/authValidators')
 
 router.put('/register',
     [

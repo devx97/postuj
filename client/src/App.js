@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Route} from "react-router-dom"
-import { hot } from 'react-hot-loader'
+import {hot} from 'react-hot-loader'
 
 import Header from "./components/layout/Header"
 import Blog from "./pages/posts/Blog"
@@ -16,10 +16,12 @@ class App extends Component {
     return (
         <React.Fragment>
           <Header/>
-          <Container text style={{marginTop: '50px'}}>
+          <Container style={{paddingTop: '60px'}}>
             <Route exact path="/" component={Blog}/>
             <Route exact path="/p/:postId" component={SingleThread}/>
             <Route exact path="/p/:postId/:commentId" component={SingleThread}/>
+          </Container>
+          <Container style={{width: 420}}>
             <Route exact path="/login" component={Login}/>
             <Route exact path="/register" component={Register}/>
             <Route exact path="/forgot-password" component={ForgotPassword}/>

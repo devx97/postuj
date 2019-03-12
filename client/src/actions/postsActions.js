@@ -1,5 +1,3 @@
-import {reset, SubmissionError} from "redux-form"
-
 import backend from "../apis/backend"
 import {
   ADD_COMMENT_SUCCESS,
@@ -13,11 +11,12 @@ export const addPost = ({content}) => dispatch =>
     backend.post('/post/new', {content})
     .then(result => {
       dispatch(addPostSuccess(result.data))
-      dispatch(reset('newPost'))
     })
+    // TODO
+    // Reset form after new post
     .catch(error => {
       if (error.response.status === 422 && error.response.data.errors) {
-        throw new SubmissionError(error.response.data.errors)
+        return error.response.data.errors
       }
     })
 
@@ -62,11 +61,12 @@ export const reply = (postId, content) => dispatch => {
   return backend.post('/post/new-comment', {postId, content})
   .then(result => {
     dispatch(addCommentSuccess(result.data, postId))
-    dispatch(reset(`form-p-${postId}`))
+    // TODO
+    // Reset form after reply
   })
   .catch(error => {
     if (error.response.status === 422 && error.response.data.errors) {
-      throw new SubmissionError(error.response.data.errors)
+      return error.response.data.errors
     }
   })
 }
@@ -79,13 +79,10 @@ const addCommentSuccess = (newComment, postId) => ({
 
 export const editPost = (content, postId, commentId) => dispatch =>
     backend.post('/post/edit', {content, postId, commentId})
-    .then(result => {
-      console.log(result.data)
-      dispatch(editPostSuccess(content, postId, commentId))
-    })
+    .then(result => dispatch(editPostSuccess(content, postId, commentId)))
     .catch(error => {
       if (error.response.status === 422 && error.response.data.errors) {
-        throw new SubmissionError(error.response.data.errors)
+        return error.response.data.errors
       } else {
         console.log(error)
       }

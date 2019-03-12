@@ -1,6 +1,9 @@
 import {addValidator} from "redux-form-validators"
 import jwtdecode from 'jwt-decode'
 
+export const composeValidators = (...validators) => (options, value, allValues) =>
+        validators.reduce((error, validator) => error || validator(options, value, allValues), undefined)
+
 export const usernameValidator = addValidator({
   defaultMessage: "Invalid username.",
   validator: (options, value) =>

@@ -16,9 +16,10 @@ const authRoutes = require('./routes/auth')
 app.use('/api', mainRoutes)
 app.use('/api/auth', authRoutes)
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   const message = err.message
   const data = err.data
+  console.log(res)
   res.status(err.statusCode || 500).json({message, data})
 })
 const PORT = process.env.PORT || 5000

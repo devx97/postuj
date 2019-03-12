@@ -1,43 +1,50 @@
 import React, {Component, Fragment} from 'react'
-import {NavLink} from "react-router-dom"
+import {Link, NavLink} from "react-router-dom"
 import {connect} from "react-redux"
 
 import {logOut} from "../../actions"
 
-import {Button, Container, Dropdown, Menu, Image, Icon} from 'semantic-ui-react'
+import {Dropdown, Menu, Image, Container} from 'semantic-ui-react'
 
 class Header extends Component {
   render() {
-    const options = [
-      {key: 1, text: 'Choice 1', value: 1},
-      {key: 2, text: 'Choice 2', value: 2},
-      {key: 3, text: 'Choice 3', value: 3},
-    ]
-
     const trigger = (
         <span>
-          {this.props.username} <Image avatar src={'https://media.giphy.com/media/B1IWXbj4Disow/200.gif'}/>
+          {this.props.username} <Image avatar
+                                       src={'https://media.giphy.com/media/B1IWXbj4Disow/200.gif'}/>
         </span>
     )
 
     return (
-        <Menu inverted secondary fixed={'top'} style={{background: '#2a2a2a'}}>
-          <Menu.Item as={NavLink} exact to={'/'} icon={'blogger'} content={'Blog'}/>
-          <Menu.Item as={NavLink} exact to={'/hot'} icon={'fire'} content={'Hot!'}/>
-          <Menu.Menu position={'right'}>
-            {this.props.isLogged ?
-                <Dropdown trigger={trigger} icon={null} item>
-                  <Dropdown.Menu>
-                    <Dropdown.Item text={'Profile'} icon={'user'} as={NavLink} to={'/profile'}  />
-                    <Dropdown.Item text={'Logout'} icon={'sign out'} onClick={this.props.logOut}/>
-                  </Dropdown.Menu>
-                </Dropdown>
-                : <Fragment>
-                  <Menu.Item as={NavLink} to={'/register'} icon={'add user'} content={'Register'}/>
-                  <Menu.Item as={NavLink} to={'/login'} icon={'sign in'} content={'Login'}/>
-                </Fragment>
-            }
-          </Menu.Menu>
+        <Menu color={'blue'} fixed={'top'} pointing secondary inverted style={{background: '#2a2a2a'}}>
+          <Container>
+            <Menu.Item icon={'blogger'} content={'Blog'}
+                       as={NavLink}
+                       to={'/'}
+                       exact/>
+            <Menu.Item icon={'fire'} content={'Hot!'}
+                       as={NavLink}
+                       to={'/hot'} />
+            <Menu.Menu position={'right'}>
+              {this.props.isLogged ?
+                  <Dropdown style={{padding: '4px 0'}} trigger={trigger} icon={null} item>
+                    <Dropdown.Menu>
+                      <Dropdown.Item icon={'user'} text={'Profile'}
+                                     as={Link}
+                                     to={'/profile'}/>
+                      <Dropdown.Item icon={'sign out'} text={'Logout'}
+                                     onClick={this.props.logOut}/>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  : <Fragment>
+                    <Menu.Item icon={'add user'} content={'Register'}
+                               as={NavLink} to={'/register'}/>
+                    <Menu.Item icon={'sign in'} content={'Login'}
+                               as={NavLink} to={'/login'}/>
+                  </Fragment>
+              }
+            </Menu.Menu>
+          </Container>
         </Menu>
     )
   }

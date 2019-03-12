@@ -1,5 +1,3 @@
-import {SubmissionError} from "redux-form"
-
 import backend from "../apis/backend"
 import {history} from "../routes/ExtendedBrowserRouter"
 import {LOGIN_WITH_TOKEN, LOGOUT_SUCCESS} from './types'
@@ -11,8 +9,8 @@ export const register = form => () =>
       history.push('/login')
     })
     .catch(error => {
-      if (error.response.status === 422 && error.response.data.errors) {
-        throw new SubmissionError(error.response.data.errors)
+      if (error.response && error.response.status === 422 && error.response.data.errors) {
+        return error.response.data.errors
       }
     })
 
@@ -20,8 +18,8 @@ export const logIn = form => () =>
     backend.post('/auth/login', form)
     .then(history.goBack)
     .catch(error => {
-      if (error.response.status === 422 && error.response.data.errors) {
-        throw new SubmissionError(error.response.data.errors)
+      if (error.response && error.response.status === 422 && error.response.data.errors) {
+        return error.response.data.errors
       }
     })
 
@@ -47,10 +45,9 @@ export const forgotPassword = form => async () => {
   try {
     console.log(form)
     await backend.post('/auth/forgot-password', form)
-    return Promise.reject(new SubmissionError({email: "Email sent."}))
   } catch (error) {
     if (error.response.status === 422 && error.response.data.errors) {
-      throw new SubmissionError(error.response.data.errors)
+      return error.response.data.errors
     }
   }
 }
@@ -63,7 +60,7 @@ export const resetPassword = form => async () => {
     history.push('/login')
   } catch (error) {
     if (error.response.status === 422 && error.response.data.errors) {
-      throw new SubmissionError(error.response.data.errors)
+      return error.response.data.errors
     }
   }
 }

@@ -6,7 +6,7 @@ import store from '../store'
 import {logInWithToken, logOut} from "../actions"
 
 const backend = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'http://192.168.8.10:5000/api',
   timeout: 5000
 })
 

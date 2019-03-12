@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux'
-import {change, formValueSelector} from 'redux-form'
 import Linkify from 'react-linkify'
 
 import TimeAgo from 'react-timeago'
@@ -71,16 +70,11 @@ const Post = ({post, handleReply, change, plusPost, postId, username, replyConte
   </div>
 }
 
-const mapStateToProps = (state, {postId}) => {
-  const selector = formValueSelector(`form-p-${postId}`)
-  return {
-    username: state.auth.user.username,
-    replyContent: selector(state, 'content')
-  }
-}
+const mapStateToProps = (state, {postId}) => ({
+  username: state.auth.user.username
+})
 
 const mapDispatchToProps = dispatch => ({
-  change: (form, field, value) => dispatch(change(form, field, value)),
   plusPost: (postId, commentId) => dispatch(plusPost(postId, commentId)),
   editPost: (content, postId, commentId) => dispatch(editPost(content, postId, commentId))
 })

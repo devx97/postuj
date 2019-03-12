@@ -1,89 +1,78 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from "react-redux"
-import {Field, reduxForm} from "redux-form"
+import {Form, Field} from "react-final-form"
 import {required, length} from "redux-form-validators"
 
+import {Button, Form as SUIForm, Menu, Message} from 'semantic-ui-react'
 import {resetPassword} from "../../actions"
-import {passwordsMatch, tokenValidator} from '../../helpers/customValidators'
-import './Auth.css'
+import {composeValidators, passwordsMatch, tokenValidator} from '../../helpers/customValidators'
+import FormField from '../../components/auth/FormField'
 
 class ResetPassword extends Component {
   componentWillMount() {
-    if (this.props.isLogged)
+    if (this.props.isLogged) {
       this.props.history.goBack()
+    }
   }
 
-  renderField = ({input, label, type, meta: {touched, error}}) =>
-      <div className="auth-item">
-        <label>{label}</label>
-        <input {...input}
-               className={`${touched && error && 'error'}`}
-               placeholder={`Enter ${label && label.split(
-                   " ").pop().toLowerCase()}`}
-               type={type}
-               autoComplete="username"
-        />
-        {touched && error && <div>{error}</div>}
-      </div>
-
   render() {
-    const linkToForgotPassword = <Link to={'/forgot-password'} style={{color: '#ccc'}}>Generate new token</Link>
-    let resetTokenError
-    if (this.props.resetPasswordForm
-        && this.props.resetPasswordForm.syncErrors
-        && this.props.resetPasswordForm.syncErrors.resetToken) {
-      resetTokenError = this.props.resetPasswordForm.syncErrors.resetToken
-    }
+    const linkToForgotPassword =
+        <Link to={'/forgot-password'} style={{color: '#ccc'}}>Generate new token</Link>
     return (
-        <form className="auth-form"
-              onSubmit={this.props.handleSubmit(this.props.resetPassword)}>
-          <Field
-              name="newPassword"
-              label="New password"
-              type="password"
-              autoComplete="new-password"
-              component={this.renderField}
-              validate={[
-                required({msg: 'Required.'}),
-                length({min: 6, msg: 'Minimum 6 characters.'}),
-                length({max: 64, msg: 'Maximum 64 characters.'})
-              ]}
-          />
-          <Field
-              name="newPassword2"
-              label="Confirm new password"
-              type="password"
-              autoComplete="new-password"
-              component={this.renderField}
-              validate={[
-                required({msg: 'Required.'}),
-                length({min: 6, msg: 'Minimum 6 characters.'}),
-                length({max: 64, msg: 'Maximum 64 characters.'}),
-                passwordsMatch({pass2name: 'newPassword', msg: 'Passwords have to match.'}),
-              ]}
-          />
-          <Field
-              name="resetToken"
-              type="hidden"
-              component="input"
-              validate={[
-                required({msg: 'Required.'}),
-                tokenValidator({msg: 'Token expired or invalid.'}),
-              ]}
-          />
-          {resetTokenError && <div className="auth-item" style={{color: 'red'}}>
-            {resetTokenError} {linkToForgotPassword}
-          </div>}
-          <div className="auth-item">
-            <button type="submit">Send</button>
-          </div>
-          <div className="auth-item">
-            <Link to={'/login'} className={'auth-right'}>
-              Log in instead
-            </Link>
-          </div>
-        </form>
+        <Form
+            initialValues={{resetToken: this.props.match.params.resetToken}}
+            onSubmit={this.props.resetPassword}
+            render={({handleSubmit, errors}) =>
+                <SUIForm
+                    inverted
+                    error={errors && true}
+                    onSubmit={handleSubmit}>
+                  <Field
+                      name="newPassword"
+                      label="New password"
+                      type="password"
+                      autoComplete="new-password"
+                      component={FormField}
+                      validate={composeValidators(
+                          required({msg: 'Required.'}),
+                          length({min: 6, msg: 'Minimum 6 characters.'}),
+                          length({max: 64, msg: 'Maximum 64 characters.'})
+                      )}
+                  />
+                  <Field
+                      name="newPassword2"
+                      label="Confirm new password"
+                      type="password"
+                      autoComplete="new-password"
+                      component={FormField}
+                      validate={composeValidators(
+                          required({msg: 'Required.'}),
+                          length({min: 6, msg: 'Minimum 6 characters.'}),
+                          length({max: 64, msg: 'Maximum 64 characters.'}),
+                          passwordsMatch(
+                              {pass2name: 'newPassword', msg: 'Passwords have to match.'}),
+                      )}
+                  />
+                  <Field
+                      name="resetToken"
+                      type="hidden"
+                      component="input"
+                      validate={composeValidators(
+                          required({msg: 'Required.'}),
+                          tokenValidator({msg: 'Token expired or invalid.'}),
+                      )}
+                  />
+                  {errors.resetToken &&
+                  <Message error color={'black'} header={errors.resetToken}
+                           content={linkToForgotPassword}/>}
+
+                  <Menu secondary inverted style={{paddingLeft: '5px'}}>
+                    <Button color="blue" type="submit" content={'Send'}/>
+                    <Menu.Item position={'right'} as={Link} to={'/login'}
+                               content={'Log in instead'}/>
+                  </Menu>
+                </SUIForm>}/>
     )
   }
 }
@@ -97,11 +86,6 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = dispatch => ({
   resetPassword: form => dispatch(resetPassword(form))
 })
-
-ResetPassword = reduxForm({
-  form: 'resetPassword',
-  enableReinitialize: true,
-})(ResetPassword)
 
 export default connect(
     mapStateToProps,

@@ -16,6 +16,7 @@ class ForgotPassword extends Component {
             onSubmit={this.props.forgotPassword}
             render={({handleSubmit, errors, submitSucceeded, dirtySinceLastSubmit}) =>
                 <SUIForm
+                    inverted
                     success={submitSucceeded && !dirtySinceLastSubmit}
                     error={errors && true}
                     onSubmit={handleSubmit}>

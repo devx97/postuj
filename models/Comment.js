@@ -1,19 +1,16 @@
 const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-
-const commentSchema = require('./standardPostSchema')
+const commentSchema = require('./standardPostSchema').clone()
 
 commentSchema.add({
-  parentPost: {
+  _id: {
     type: Number,
-    ref: 'Post',
-    required: true
+    required: true,
+    default: 1
   },
   removed: {
     type: Boolean,
     default: false,
   }
 })
-console.log(commentSchema)
 
 module.exports = CommentModel = mongoose.model('Comment', commentSchema)

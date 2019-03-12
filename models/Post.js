@@ -1,27 +1,20 @@
 const mongoose = require('mongoose')
-const Schema = mongoose.Schema
 const AutoIncrement = require('mongoose-auto-increment')
-// mongoose.createConnection(process.env.DB_URI)
 AutoIncrement.initialize(mongoose)
 
-const postSchema = require('./standardPostSchema')
+const postSchema = require('./standardPostSchema').clone()
 
 postSchema.add({
-  totalPluses: {
-    type: Number,
-    required: true
-  },
   comments: {
-    type: [Schema.Types.ObjectId]
-  },
-  commentsCount: {
-    type: Number,
-    required: true
+    type: [Object]
   },
   tags: {
     type: [String]
   }
 })
-postSchema.plugin(AutoIncrement.plugin, 'Post')
+postSchema.plugin(AutoIncrement.plugin, {
+  model: 'Post',
+  startAt: -1, // post nr -1, easter egg ;)
+})
 
 module.exports = Post = mongoose.model('Post', postSchema)

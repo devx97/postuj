@@ -21,10 +21,6 @@ const userSchema = new Schema({
     type: [Number],
     ref: 'Post'
   },
-  comments: {
-    type: [Schema.Types.ObjectId],
-    ref: 'Comment',
-  },
   blacklistedPeople: {
     type: [Number],
     ref: 'User'

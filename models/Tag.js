@@ -18,10 +18,6 @@ const tagSchema = new Schema({
     type: [Number],
     ref: 'User',
     default: [],
-  },
-  subscribersCount: {
-    type: Number,
-    default: 0
   }
 }, {_id: false, timestamps: true})
 

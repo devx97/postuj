@@ -1,19 +1,21 @@
 const express = require('express')
-const {body} = require('express-validator/check')
 const router = express.Router()
 
 const mainController = require('../controllers/index')
 const isAuth = require('../middlewares/is-auth')
 const handleVerificationErrors = require('../middlewares/handleVerificationErrors')
+const {
+  postLengthValidator,
+  antiSpamValidator,
+  postExists,
+  isAuthorValidator,
+} = require('../helpers/postValidators')
 
-// noinspection JSCheckFunctionSignatures
 router.post('/post/new',
     isAuth,
     [
-      body('content')
-      .trim()
-      .isLength({min: 10})
-      .withMessage("Post must contain at least 10 characters.")
+      postLengthValidator('content'),
+      antiSpamValidator(),
     ],
     handleVerificationErrors,
     mainController.postNewPost)
@@ -21,16 +23,25 @@ router.post('/post/new',
 router.post('/post/new-comment',
     isAuth,
     [
-      body('content')
-      .trim()
-      .isLength({min: 10})
-      .withMessage("Post must contain at least 10 characters.")
+      postLengthValidator('content')
     ],
     handleVerificationErrors,
     mainController.postNewComment)
 
-router.get('/post/:id', mainController.getPost)
+router.post('/post/edit',
+    isAuth,
+    [
+      postLengthValidator('content'),
+      postExists('postId'),
+      isAuthorValidator(),
+    ],
+    handleVerificationErrors,
+    mainController.postEditPost)
+
+router.get('/post/:postId', mainController.getPost)
 
 router.get('/posts', mainController.getPosts)
+
+router.post('/post/plus/', isAuth, mainController.postPlus)
 
 module.exports = router

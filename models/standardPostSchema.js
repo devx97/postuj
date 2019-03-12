@@ -10,14 +10,19 @@ const standardPostSchema = new Schema({
     type: String,
     required: true,
   },
-  embed: {
+  embedded: {
     type: String,
   },
-  peoplePlussed: [String],
+  usersPlussed: {
+    type: [String],
+    required: true,
+    default: [],
+  },
   pluses: {
     type: Number,
-    required: true
-  },
+    required: true,
+    default: 0,
+  }
 }, {_id: false, timestamps: true})
 
 module.exports = standardPostSchema

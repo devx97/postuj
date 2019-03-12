@@ -1,4 +1,4 @@
-module.exports = posts =>
+exports.posts = posts =>
     posts.map(post => ({
       postId: post._id,
       pluses: post.pluses,
@@ -11,8 +11,18 @@ module.exports = posts =>
           author: comment.author,
           content: comment.content,
           pluses: comment.pluses,
-          createdAt: post.createdAt,
+          createdAt: comment.createdAt,
           removed: comment.removed,
         }
       })
+    }))
+
+exports.comments = comments =>
+    comments.map(comment => ({
+      commentId: comment._id,
+      author: comment.author,
+      content: comment.content,
+      pluses: comment.pluses,
+      createdAt: comment.createdAt,
+      removed: comment.removed,
     }))

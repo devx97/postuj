@@ -16,7 +16,7 @@ module.exports = async (req, res, next) => {
     if (decodedToken.exp >= Date.now() / 1000) { // if jwtoken exp time is valid
       res.setHeader('Access-Control-Expose-Headers', '') // response.headers.jwt will not be available so app will be using localStorage token
       req.userId = decodedToken.userId
-      req.userName = decodedToken.username
+      req.username = decodedToken.username
       return next()
     } else if ((Date.now() / 1000) - decodedToken.exp > 2 * 60 * 60) { // if jwtoken exp time is higher than 2 weeks remove jwtoken and response 401 unauthorized
       // useless token, just delete this from db, probably will remove itself with mongoose expire_at but its better to check
@@ -55,7 +55,7 @@ module.exports = async (req, res, next) => {
       }, 50)
       res.setHeader('jwt', token.toString())
       req.userId = decodedToken.userId
-      req.userName = decodedToken.username
+      req.username = decodedToken.username
       return next()
     }
   } catch (err) {

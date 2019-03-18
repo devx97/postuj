@@ -55,7 +55,7 @@ exports.passwordsMatchValidator = (passFieldName, anotherPassFieldName) => body(
 // )
 // THIS IS RETURNNG JWT ERRORS, NOT CUSTOM
 
-exports.tokenValidator = (fieldName) => body(fieldName)
+exports.tokenValidator = fieldName => body(fieldName)
 .custom(resetToken => {
   try {
     jwt.verify(resetToken, process.env.JWT_SECRET)

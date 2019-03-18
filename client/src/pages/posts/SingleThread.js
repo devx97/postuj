@@ -20,9 +20,9 @@ class SingleThread extends Component {
 
   render() {
     return (
-        <div className="blog">
+        <React.Fragment>
           {this.props.posts.map(post => <Thread key={post.postId} post={post}/>)}
-        </div>
+        </React.Fragment>
     )
   }
 }

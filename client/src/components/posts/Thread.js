@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import Post from './Post'
 import {reply} from '../../actions'
 import PostForm from './PostForm'
+import {Container, Segment} from 'semantic-ui-react'
 
 const Thread = ({post, reply}) => {
   const [replyMode, setReplyMode] = useState(false)
@@ -28,14 +29,14 @@ const Thread = ({post, reply}) => {
   }
 
   return (
-      <React.Fragment>
+      <Segment inverted style={{padding: '7px'}}>
         <Post
             key={post.postId}
             handleReply={() => setReplyMode(true)}
             post={post}
             postId={post.postId}
         />
-        <div className="comments">
+        <Container style={{paddingLeft: '35px'}}>
           {comments.map(comment =>
               <Post
                   key={comment.commentId}
@@ -43,7 +44,7 @@ const Thread = ({post, reply}) => {
                   post={comment}
                   postId={post.postId}
               />)}
-        </div>
+        </Container>
         {post.comments.length > 2 &&
         <div className="show-more" onClick={() => changeBestTwo(!bestTwo)}>
           {post.comments.length > 2 && bestTwo
@@ -61,7 +62,7 @@ const Thread = ({post, reply}) => {
             />
           </div>
         }
-      </React.Fragment>
+      </Segment>
   )
 }
 

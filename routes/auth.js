@@ -17,7 +17,7 @@ const {
   tokenValidator
 } = require('../helpers/authValidators')
 
-router.put('/register',
+router.post('/register',
     [
       usernameValidator('username'),
       usernameTakenValidator('username'),

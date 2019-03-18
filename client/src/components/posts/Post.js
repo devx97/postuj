@@ -13,7 +13,7 @@ import {Link} from 'react-router-dom'
 
 const formatter = buildFormatter(polishStrings)
 
-const Post = ({post, handleReply, change, plusPost, postId, username, replyContent, editPost}) => {
+const Post = ({post, handleReply, plusPost, postId, username, replyContent, editPost}) => {
   const [editMode, changeEditMode] = useState(false)
 
   const handleEditPost = ({content}) => {
@@ -23,7 +23,6 @@ const Post = ({post, handleReply, change, plusPost, postId, username, replyConte
 
   const handleReplyMode = () => {
     handleReply()
-    change(`form-p-${postId}`, 'content', (replyContent || "") + `@${post.author}: `)
   }
 
   return <div className="postContainer">

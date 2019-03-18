@@ -22,12 +22,10 @@ class App extends Component {
             <Route exact path="/p/:postId/:commentId" component={SingleThread}/>
           </Container>
           <Container style={{width: 420}}>
-            <Segment inverted>
               <Route exact path="/login" component={Login}/>
               <Route exact path="/register" component={Register}/>
               <Route exact path="/forgot-password" component={ForgotPassword}/>
               <Route exact path="/reset-password/:resetToken" component={ResetPassword}/>
-            </Segment>
           </Container>
         </React.Fragment>
     )

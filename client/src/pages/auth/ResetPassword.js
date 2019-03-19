@@ -4,7 +4,7 @@ import {connect} from "react-redux"
 import {Form, Field} from "react-final-form"
 import {required, length} from "redux-form-validators"
 
-import {Button, Container, Form as SUIForm, Menu, Message, Segment} from 'semantic-ui-react'
+import {Button, Form as SUIForm, Menu, Message, Segment} from 'semantic-ui-react'
 import {resetPassword} from "../../actions"
 import {composeValidators, passwordsMatch, tokenValidator} from '../../helpers/customValidators'
 import FormField from '../../components/auth/FormField'

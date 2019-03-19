@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 
 import {fetchPost, plusPost} from "../../actions"
-import './Blog.css'
+// import './Blog.css'
 import Thread from '../../components/posts/Thread'
 
 class SingleThread extends Component {

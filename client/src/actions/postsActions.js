@@ -7,11 +7,9 @@ import {
   EDIT_POST_SUCCESS,
 } from "./types"
 
-export const addPost = ({content}) => dispatch =>
+export const addPost = content => dispatch =>
     backend.post('/post/new', {content})
-    .then(result => {
-      dispatch(addPostSuccess(result.data))
-    })
+    .then(result => dispatch(addPostSuccess(result.data)))
     // TODO
     // Reset form after new post
     .catch(error => {
@@ -27,9 +25,7 @@ const addPostSuccess = post => ({
 
 export const fetchPosts = () => dispatch =>
     backend.get('/posts')
-    .then(result => {
-      dispatch(addPosts(result.data))
-    })
+    .then(result => dispatch(addPosts(result.data)))
     .catch(console.log)
 
 export const fetchPost = postId => dispatch =>

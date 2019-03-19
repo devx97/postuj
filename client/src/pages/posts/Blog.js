@@ -20,10 +20,10 @@ class Blog extends Component {
 
   render() {
     return (
-        <div className="blog">
-          {this.props.isLogged && <PostForm submitBtn onSubmit={this.props.addPost} form={'newPost'}/>}
+        <React.Fragment>
+          {this.props.isLogged && <PostForm onSubmit={this.props.addPost}/>}
           {this.props.posts.map(post => <Thread key={post.postId} post={post}/>)}
-        </div>
+        </React.Fragment>
     )
   }
 }

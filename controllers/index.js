@@ -15,6 +15,7 @@ exports.getPost = async (req, res, next) => {
 
 exports.postNewPost = async (req, res, next) => {
   const {content, embedded} = req.body
+  content.entityMap = {test: 'XD'}
   const post = new Post({
     content,
     author: req.username,

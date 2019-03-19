@@ -14,7 +14,7 @@ const {
 router.post('/post/new',
     isAuth,
     [
-      postLengthValidator('content'),
+      // postLengthValidator('content'),
       antiSpamValidator(),
     ],
     handleVerificationErrors,

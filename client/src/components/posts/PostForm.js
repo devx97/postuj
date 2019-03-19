@@ -1,53 +1,45 @@
 import React, {Component} from 'react'
-import {Field} from 'react-final-form'
-import {required, length} from "redux-form-validators"
-import Textarea from 'react-textarea-autosize'
-import {Editor, EditorState} from 'draft-js'
+import Editor from 'draft-js-plugins-editor';
+import {EditorState} from 'draft-js'
+import {stateToMarkdown} from 'draft-js-export-markdown'
+import createHashtagPlugin from 'draft-js-hashtag-plugin';
+import createLinkifyPlugin from 'draft-js-linkify-plugin';
+import createEmojiPlugin from 'draft-js-emoji-plugin'
 
-import {Form} from 'react-final-form'
-import {Segment, Form as SUIForm, Button} from 'semantic-ui-react'
-import {composeValidators} from '../../helpers/customValidators'
+import {Segment, Button} from 'semantic-ui-react'
+import 'draft-js-emoji-plugin/lib/plugin.css';
+import 'draft-js-hashtag-plugin/lib/plugin.css';
+import 'draft-js-linkify-plugin/lib/plugin.css';
+let linkifyPlugin = createLinkifyPlugin({
+  target: '_blank',
+  rel: 'noopener'
+})
+const hashtagPlugin = createHashtagPlugin()
+const emojiPlugin = createEmojiPlugin()
+const {EmojiSuggestions} = emojiPlugin
 
 class PostForm extends Component {
   constructor(props) {
-    super(props);
-    this.state = {editorState: EditorState.createEmpty()};
-    this.onChange = (editorState) => this.setState({editorState});
+    super(props)
+    this.state = {editorState: EditorState.createEmpty()}
   }
 
-  generateTextarea = ({input, meta: {touched, error}}) =>
-      <React.Fragment>
-      {/*<Textarea*/}
-          {/*minRows={3}*/}
-          {/*autoFocus*/}
-          {/*maxRows={30}*/}
-          {/*{...input}*/}
-      {/*/>*/}
-        {touched && error && <div className="error-message">{error}</div>}
-      </React.Fragment>
+  onChange = editorState => {
+    return this.setState({editorState})
+  }
 
   render() {
     return (
         <Segment inverted>
-          <Editor editorState={this.state.editorState} onChange={this.onChange} />
-          <Form
-              onSubmit={this.props.handleSubmit}
-              render={({handleSubmit}) =>
-                  <SUIForm onSubmit={handleSubmit}>
-                    <Field
-                        name="content"
-                        validate={composeValidators(
-                            required({msg: 'Required.'}),
-                            length({min: 5, msg: 'Minimum 5 characters.'}),
-                            length({max: 5000, msg: 'Maximum 5000 characters.'})
-                        )}
-                        component={this.generateTextarea}
-                    />
-                    {this.props.submitBtn && <Button primary type="submit" content={'Send'}/>}
-                    {this.props.cancel && <Button secondary onClick={this.props.cancel}
-                                                  value={'Cancel'}>Cancel</Button>}
-                  </SUIForm>}
-          />
+          <Editor editorState={this.state.editorState}
+                  plugins={[linkifyPlugin, hashtagPlugin, emojiPlugin]}
+                  onChange={this.onChange}/>
+          <EmojiSuggestions/>
+          <Button primary size="small" compact content={'Send'}
+                  onClick={() => this.props.onSubmit(
+                      stateToMarkdown(this.state.editorState.getCurrentContent()))}/>
+          {this.props.cancel
+          && <Button secondary onClick={this.props.cancel} content={'Cancel'}/>}
         </Segment>
     )
   }

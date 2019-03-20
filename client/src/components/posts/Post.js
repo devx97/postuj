@@ -1,50 +1,24 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import {EditorState} from 'draft-js'
-import Editor from 'draft-js-plugins-editor';
-import createHashtagPlugin from 'draft-js-hashtag-plugin';
-import createLinkifyPlugin from 'draft-js-linkify-plugin';
-import createMarkdownShortcutsPlugin from 'draft-js-markdown-shortcuts-plugin';
-import Prism from 'prismjs'
-import PrismDecorator from 'draft-js-prism'
-import createPrismPlugin from 'draft-js-prism-plugin';
-import {stateFromMarkdown} from 'draft-js-import-markdown'
+import {Link} from 'react-router-dom'
+import {Button} from 'semantic-ui-react'
 
 import TimeAgo from 'react-timeago'
 import polishStrings from 'react-timeago/lib/language-strings/pl'
 import buildFormatter from 'react-timeago/lib/formatters/buildFormatter'
 
 import {plusPost, editPost} from '../../actions'
-
-import {Link} from 'react-router-dom'
-import {Button} from 'semantic-ui-react'
-import 'draft-js-mention-plugin/lib/plugin.css'
-import 'draft-js-linkify-plugin/lib/plugin.css'
-import 'prismjs/themes/prism-dark.css'
+import {Editor} from 'slate-react'
+import {Value} from 'slate'
+import Plain from 'slate-plain-serializer'
 
 const formatter = buildFormatter(polishStrings)
-let linkifyPlugin = createLinkifyPlugin({
-  target: '_blank',
-  rel: 'noopener'
-})
-const hashtagPlugin = createHashtagPlugin()
-const markdownShortcutsPlugin = createMarkdownShortcutsPlugin()
-const prismPlugin = createPrismPlugin({
-  // It's required to provide your own instance of Prism
-  prism: Prism
-})
-const prismDecorator = new PrismDecorator({prism: Prism})
 
 class Post extends Component {
   constructor(props) {
     super(props);
     this.state = {
       editMode: false,
-      editorState: EditorState.createWithContent(stateFromMarkdown(this.props.post.content.replace(
-          /@([a-zA-Z0-9]+([-_][a-zA-Z0-9]+)*[a-zA-Z0-9])/g,
-          // "<a href='/u/$1' target='_blank' rel='noopener'>[@$1](XD.com)</a>"
-          "[@$1](xd.com)"
-      )))
     }
   }
 
@@ -76,21 +50,16 @@ class Post extends Component {
       <div>
         <div className="section">
           <Editor
-              editorState={this.state.editorState}
-              plugins={[linkifyPlugin, hashtagPlugin, markdownShortcutsPlugin, prismPlugin]}
-              onChange={editorState => this.setState({editorState})}
-              readOnly={!this.state.editMode}
-              decorators={[prismDecorator]}
+              value={Plain.deserialize(post.content.replace(
+                  /@([a-zA-Z0-9]+([-_][a-zA-Z0-9]+)*[a-zA-Z0-9])/g,
+                  "<a href='/u/$1' target='_blank' rel='noopener'>@$1</a>"
+              ))}
+              readOnly
           />
-          {/*<Linkify>*/}
-          {/*{post.content.replace(*/}
-          {/*/@([a-zA-Z0-9]+([-_][a-zA-Z0-9]+)*[a-zA-Z0-9])/g,*/}
-          {/*"<a href='/u/$1' target='_blank' rel='noopener'>@$1</a>"*/}
-          {/*)}*/}
-          {/*</Linkify>*/}
         </div>
         {username === post.author
-        && <Button secondary compact size="mini" onClick={() => this.setState({editMode: !this.state.editMode})}
+        && <Button secondary compact size="mini"
+                   onClick={() => this.setState({editMode: !this.state.editMode})}
                    icon={'edit'}/>}
         {username === post.author
         && <Button secondary compact size="mini" onClick={() => console.log("REMOVE")}

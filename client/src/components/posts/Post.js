@@ -1,16 +1,15 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {Button} from 'semantic-ui-react'
+import {Button, Segment} from 'semantic-ui-react'
 
 import TimeAgo from 'react-timeago'
 import polishStrings from 'react-timeago/lib/language-strings/pl'
 import buildFormatter from 'react-timeago/lib/formatters/buildFormatter'
 
 import {plusPost, editPost} from '../../actions'
-import {Editor} from 'slate-react'
-import {Value} from 'slate'
-import Plain from 'slate-plain-serializer'
+import ReactQuill from 'react-quill'
+import hljs from 'highlight.js'
 
 const formatter = buildFormatter(polishStrings)
 
@@ -20,6 +19,11 @@ class Post extends Component {
     this.state = {
       editMode: false,
     }
+  }
+
+  modules = {
+    toolbar: false,
+    syntax: {highlight: text => hljs.highlightAuto(text).value},
   }
 
   handleEditPost = ({content}) => {
@@ -49,12 +53,11 @@ class Post extends Component {
 
       <div>
         <div className="section">
-          <Editor
-              value={Plain.deserialize(post.content.replace(
-                  /@([a-zA-Z0-9]+([-_][a-zA-Z0-9]+)*[a-zA-Z0-9])/g,
-                  "<a href='/u/$1' target='_blank' rel='noopener'>@$1</a>"
-              ))}
-              readOnly
+          <ReactQuill
+              ref={quill => this.editor = quill && quill.getEditor()}
+              modules={this.modules}
+              defaultValue={post.content}
+              readOnly={true}
           />
         </div>
         {username === post.author

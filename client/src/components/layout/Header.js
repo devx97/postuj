@@ -16,7 +16,8 @@ class Header extends Component {
     )
 
     return (
-        <Menu color={'blue'} fixed={'top'} pointing secondary inverted style={{background: '#2a2a2a'}}>
+        <Menu color={'blue'} fixed={'top'} pointing secondary inverted
+              style={{background: '#2a2a2a'}}>
           <Container>
             <Menu.Item icon={'blogger'} content={'Blog'}
                        as={NavLink}
@@ -24,7 +25,7 @@ class Header extends Component {
                        exact/>
             <Menu.Item icon={'fire'} content={'Hot!'}
                        as={NavLink}
-                       to={'/hot'} />
+                       to={'/hot'}/>
             <Menu.Menu position={'right'}>
               {this.props.isLogged ?
                   <Dropdown style={{padding: '4px 0'}} trigger={trigger} icon={null} item>
